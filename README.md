@@ -7,6 +7,9 @@ Use the app by taking a picture from your camera or by selecting an image from y
 
 # Release Notes
 Basic AI Recognition Implemented.
+
 Basic four screen UI Implemented.
+
 Picking an image from photos Implemented.
+
 Bounding Boxes showing recognized food objects Implemented.
