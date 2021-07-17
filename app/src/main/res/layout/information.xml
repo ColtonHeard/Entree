@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nutritionView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".IngredientList">
@@ -23,6 +24,7 @@
         android:id="@+id/imageButton"
         android:layout_width="45dp"
         android:layout_height="45dp"
+        android:onClick="searchClick"
         android:layout_marginTop="8dp"
         android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="parent"
@@ -38,8 +40,8 @@
         android:gravity="center_horizontal"
         android:text="Nutrition Facts"
         android:textAlignment="center"
-        android:textStyle="bold"
         android:textSize="30dp"
+        android:textStyle="bold"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -60,10 +62,10 @@
         android:layout_width="287dp"
         android:layout_height="20dp"
         android:layout_marginLeft="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/nutritionFactsDivider"
         android:text="0 servings per container"
         android:textSize="16dp"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nutritionFactsDivider"
         tools:layout_editor_absoluteY="128dp" />
 
     <TextView
@@ -83,11 +85,11 @@
         android:layout_height="25dp"
         android:layout_marginRight="20dp"
         android:text="1 cup (55 g)"
+        android:textAlignment="textEnd"
         android:textSize="20dp"
         android:textStyle="bold"
-        android:textAlignment="textEnd"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/servingSizeLabel"
         app:layout_constraintTop_toBottomOf="@+id/servingPerLabel" />
 
@@ -96,8 +98,8 @@
         android:layout_width="380dp"
         android:layout_height="15dp"
         android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
         android:layout_marginTop="5dp"
+        android:layout_marginRight="40dp"
         android:background="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.516"
@@ -108,8 +110,8 @@
         android:id="@+id/caloriesLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
         android:text="Calories"
         android:textSize="28dp"
         android:textStyle="bold"
@@ -127,7 +129,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/servingSizeDivider" />
-    
+
     <View
         android:id="@+id/caloriesDivider"
         android:layout_width="380dp"
@@ -613,8 +615,8 @@
         android:layout_width="380dp"
         android:layout_height="15dp"
         android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
         android:layout_marginTop="5dp"
+        android:layout_marginRight="40dp"
         android:background="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.516"
