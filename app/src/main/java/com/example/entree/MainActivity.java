@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -33,7 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private static final int PICK_IMAGE = 100;
     Uri imageUri;
     FoodObjectRecognizer recognizer;
-    View mainView, ingredientView;
+    View mainView, ingredientView, settingView, informationView;
+    NutritionView nutritionView;
 
     public void cameraButton(View view) {
         /**This is where the camera should open when the camera button is clicked. Proper permissions are already provided
@@ -57,14 +59,14 @@ public class MainActivity extends AppCompatActivity {
         /** This is where code that executes upon clicking the 'Extra Info' button will be placed. Making changes to this
          * is not important for milestone 1.
          */
-        setContentView(R.layout.information);
+        setContentView(informationView);
     }
 
     public void settingsOnClick(View view) {
         /** This is where code that executes upon clicking the 'Settings' button will be placed. Making changes to this
          * is not important for milestone 1.
          */
-        setContentView(R.layout.settings);
+        setContentView(settingView);
     }
 
     @Override
@@ -79,7 +81,16 @@ public class MainActivity extends AppCompatActivity {
         ingredientView = (View) findViewById(R.id.ingredientView);
         ingredientText = (TextView) findViewById(R.id.ingredientTextView);
 
+        nutritionView = new NutritionView(this.getApplicationContext(), null);
+        setContentView(nutritionView);
+
         Log.d("IngredientText", "Ingredient text is null = " + (ingredientText == null));
+
+        setContentView(R.layout.information);
+        informationView = (View) findViewById(R.id.informationView);
+
+        setContentView(R.layout.settings);
+        settingView = (View) findViewById(R.id.settingView);
 
         setContentView(mainView);
 
