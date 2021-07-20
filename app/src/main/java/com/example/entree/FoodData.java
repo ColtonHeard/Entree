@@ -1,7 +1,6 @@
 package com.example.entree;
 
 public class FoodData {
-    private String description;
     private String name;
     private String calories;
     private String fat;
@@ -17,111 +16,94 @@ public class FoodData {
     private String iron;
     private String potassium;
 
-    public String getDescription() {
-        return description;
+    public FoodData()
+    {
+        name = "None";
+        calories = "0";
+        fat = "0g";
+        saturated = "0g";
+        cholesterol = "0mg";
+        sodium = "0mg";
+        carbs = "0g";
+        fiber = "0g";
+        sugar = "0g";
+        protein = "0g";
+        vitaminD = "0mcg";
+        calcium = "0mg";
+        iron = "0mg";
+        potassium = "0mg";
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-    public void setCalories(String calories) {
-        this.calories = calories;
-    }
-    public void setFat(String fat) {
-        this.fat = fat;
-    }
-    public void setSaturated(String saturated) {
-        this.saturated = saturated;
-    }
-    public void setCholesterol(String cholesterol) {
-        this.cholesterol = cholesterol;
-    }
-    public void setSodium(String sodium) {
-        this.sodium = sodium;
-    }
-    public void setCarbs(String carbs) {
-        this.carbs = carbs;
-    }
-    public void setFiber(String fiber) {
-        this.fiber = fiber;
-    }
-    public void setSugar(String sugar) {
-        this.sugar = sugar;
-    }
-    public void setProtein(String protein) {
-        this.protein = protein;
-    }
-    public void setVitaminD(String vitaminD) {
-        this.vitaminD = vitaminD;
-    }
-    public void setCalcium(String calcium) {
-        this.calcium = calcium;
-    }
-    public void setIron(String iron) {
-        this.iron = iron;
-    }
-    public void setPotassium(String potassium) {
-        this.potassium = potassium;
+    public void setArray(String[] data) {
+        name = data[0];
+        calories = data[1];
+        fat = data[2] + "g";
+        saturated = data[3] + "g";
+        cholesterol = data[4] + "mg";
+        sodium = data[5] + "mg";
+        carbs = data[6] + "g";
+        fiber = data[7] + "g";
+        sugar = data[8] + "g";
+        protein = data[9] + "g";
+        vitaminD = data[10] + "mcg";
+        calcium = data[11] + "mg";
+        iron = data[12] + "mg";
+        potassium = data[13] + "mg";
     }
 
-
-    public String toCal() {
-        return "" + calories;
+    public String getName() {
+        return name;
     }
 
-    public String toFat() {
-        return "" + fat;
+    public String getCalories() {
+        return calories;
     }
 
-    public String toSat() {
-        return "" + saturated;
+    public String getFat() {
+        return fat;
     }
 
-    public String toCho() {
-        return "" + cholesterol;
+    public String getSaturated() {
+        return saturated;
     }
 
-    public String toSod() {
-        return "" + sodium;
+    public String getCholesterol() {
+        return cholesterol;
     }
 
-    public String toCar() {
-        return "" + carbs;
+    public String getSodium() {
+        return sodium;
     }
 
-    public String toFib() {
-        return "" + fiber;
+    public String getCarbs() {
+        return carbs;
     }
 
-    public String toSug() {
-        return "" + sugar;
+    public String getFiber() {
+        return fiber;
     }
 
-    public String toPro() {
-        return "" + protein;
+    public String getSugar() {
+        return sugar;
     }
 
-    public String toVit() {
-        return "" + vitaminD;
+    public String getProtein() {
+        return protein;
     }
 
-    public String toCalc() {
-        return "" + calcium;
+    public String getVitaminD() {
+        return vitaminD;
     }
 
-    public String toIro() {
-        return "" + iron;
+    public String getCalcium() {
+        return calcium;
     }
 
-    public String toPot() {
-        return "" + potassium;
+    public String getIron() {
+        return iron;
     }
 
-    public String toClear() {
-        return "";
+    public String getPotassium() {
+        return potassium;
     }
-
 }
