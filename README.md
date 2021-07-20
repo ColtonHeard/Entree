@@ -13,3 +13,8 @@ Basic four screen UI Implemented.
 Picking an image from photos Implemented.
 
 Bounding Boxes showing recognized food objects Implemented.
+
+/**********************MILESTONE 2*************************\
+Implementation of database information and screen that displays data retrieved
+
+Basic U.I. for 'Nutrition' tab implemented

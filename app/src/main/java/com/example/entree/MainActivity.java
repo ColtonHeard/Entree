@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
@@ -16,12 +15,19 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.mlkit.vision.objects.DetectedObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,13 +35,15 @@ public class MainActivity extends AppCompatActivity {
     //Button ingredientList = (Button) findViewById(R.id.button2); // Ingredient List Button
 
     ImageView imageView;
-    TextView ingredientText;
+    TextView ingredientText, settingsText, calorieAmount, fatAmount, saturatedFatAmount, transFatAmount, cholesterolAmount, sodiumAmount, carbAmount, fiberAmount, totalSugarAmount, proteinAmount, vitaminDAmount, calciumAmount, ironAmount, potassiumAmount, nutritionFactsLabel;
+    EditText IngredientSearch;
     Button button;
     private static final int PICK_IMAGE = 100;
     Uri imageUri;
     FoodObjectRecognizer recognizer;
-    View mainView, ingredientView, settingView, informationView;
-    NutritionView nutritionView;
+    FoodData Data;
+    View mainView, ingredientView, settingsView, nutritionView;
+    Boolean dataHasNotBeenRead = true;
 
     public void cameraButton(View view) {
         /**This is where the camera should open when the camera button is clicked. Proper permissions are already provided
@@ -59,14 +67,14 @@ public class MainActivity extends AppCompatActivity {
         /** This is where code that executes upon clicking the 'Extra Info' button will be placed. Making changes to this
          * is not important for milestone 1.
          */
-        setContentView(informationView);
+        setContentView(nutritionView);
     }
 
     public void settingsOnClick(View view) {
         /** This is where code that executes upon clicking the 'Settings' button will be placed. Making changes to this
          * is not important for milestone 1.
          */
-        setContentView(settingView);
+        setContentView(settingsView);
     }
 
     @Override
@@ -81,8 +89,29 @@ public class MainActivity extends AppCompatActivity {
         ingredientView = (View) findViewById(R.id.ingredientView);
         ingredientText = (TextView) findViewById(R.id.ingredientTextView);
 
-        nutritionView = new NutritionView(this.getApplicationContext(), null);
-        setContentView(nutritionView);
+        setContentView(R.layout.settings);
+
+        settingsView = (View) findViewById(R.id.settingsView);
+        settingsText = (TextView) findViewById(R.id.settingsTextView);
+
+        setContentView(R.layout.information);
+        nutritionView = (View) findViewById(R.id.nutritionView);
+        nutritionFactsLabel = (TextView) findViewById(R.id.nutritionFactsLabel);
+        IngredientSearch = (EditText) findViewById(R.id.IngredientSearch);
+        calorieAmount = (TextView) findViewById(R.id.calorieAmount);
+        fatAmount = (TextView) findViewById(R.id.fatAmount);
+        saturatedFatAmount = (TextView) findViewById(R.id.saturatedFatAmount);
+        transFatAmount = (TextView) findViewById(R.id.transFatAmount);
+        cholesterolAmount = (TextView) findViewById(R.id.cholesterolAmount);
+        sodiumAmount = (TextView) findViewById(R.id.sodiumAmount);
+        carbAmount = (TextView) findViewById(R.id.carbAmount);
+        fiberAmount = (TextView) findViewById(R.id.fiberAmount);
+        totalSugarAmount = (TextView) findViewById(R.id.totalSugarAmount);
+        proteinAmount = (TextView) findViewById(R.id.proteinAmount);
+        vitaminDAmount = (TextView) findViewById(R.id.vitaminDAmount);
+        calciumAmount = (TextView) findViewById(R.id.calciumAmount);
+        ironAmount = (TextView) findViewById(R.id.ironAmount);
+        potassiumAmount = (TextView) findViewById(R.id.potassiumAmount);
 
         Log.d("IngredientText", "Ingredient text is null = " + (ingredientText == null));
 
@@ -98,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
         button = (Button)findViewById(R.id.buttonLoadPicture);
 
         recognizer = new FoodObjectRecognizer();
+        Data = new FoodData();
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     private void openGallery() {
         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(gallery, PICK_IMAGE);
@@ -157,6 +188,81 @@ public class MainActivity extends AppCompatActivity {
                 }, 2000);
             }
 
+        }
+    }
+
+    private HashMap<String, FoodData> foodMap = new HashMap<>();
+
+    private void readFoodData() {
+        // Read the raw csv file
+        // Reads text from character-input stream, buffering characters for efficient reading
+        BufferedReader reader = new BufferedReader(
+            new InputStreamReader(getResources().openRawResource(R.raw.food), Charset.forName("UTF-8"))
+        );
+
+        // Initialization
+        String line = "";
+
+        // Initialization
+        try {
+            // Step over headers
+            reader.readLine();
+
+            // If buffer is not empty
+            while ((line = reader.readLine()) != null) {
+                // use comma as separator columns of CSV
+                String[] tokens = line.split(",");
+                // Read the data
+                FoodData data = new FoodData();
+                // Setters
+                data.setArray(tokens);
+                // Adding object to a class
+                foodMap.put(data.getName().toLowerCase(), data);
+            }
+            reader.close();
+            /*print();*/
+        } catch (IOException e) {
+            // Logs error with priority level
+            Log.wtf("MyActivityError", "Error reading data file on line" + line, e);
+
+            // Prints throwable details
+            e.printStackTrace();
+        }
+    }
+
+    public void searchClick(View view){
+        if (dataHasNotBeenRead) {
+            readFoodData();
+            dataHasNotBeenRead = false;
+        }
+        FoodData food = null;
+
+        if ((food = foodMap.get(IngredientSearch.getText().toString().toLowerCase())) != null) {
+            setupLabel(food);
+        } else {
+            setupLabel(new FoodData());
+        }
+    }
+
+    private void setupLabel(FoodData food){
+        calorieAmount.setText(food.getCalories());
+        fatAmount.setText(food.getFat());
+        saturatedFatAmount.setText(food.getSaturated());
+        cholesterolAmount.setText(food.getCholesterol());
+        sodiumAmount.setText(food.getSodium());
+        carbAmount.setText(food.getCarbs());
+        fiberAmount.setText(food.getFiber());
+        totalSugarAmount.setText(food.getSugar());
+        proteinAmount.setText(food.getProtein());
+        vitaminDAmount.setText(food.getVitaminD());
+        calciumAmount.setText(food.getCalcium());
+        ironAmount.setText(food.getIron());
+        potassiumAmount.setText(food.getPotassium());
+
+        if(food.getName().equals("None")){
+            nutritionFactsLabel.setText("Nutrition Facts");
+        } else {
+            nutritionFactsLabel.setText("Nutrition Facts: " + food.getName());
         }
     }
 
