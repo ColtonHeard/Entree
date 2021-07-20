@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -113,6 +114,12 @@ public class MainActivity extends AppCompatActivity {
         potassiumAmount = (TextView) findViewById(R.id.potassiumAmount);
 
         Log.d("IngredientText", "Ingredient text is null = " + (ingredientText == null));
+
+        setContentView(R.layout.information);
+        informationView = (View) findViewById(R.id.informationView);
+
+        setContentView(R.layout.settings);
+        settingView = (View) findViewById(R.id.settingView);
 
         setContentView(mainView);
 
