@@ -116,10 +116,10 @@ public class MainActivity extends AppCompatActivity {
         Log.d("IngredientText", "Ingredient text is null = " + (ingredientText == null));
 
         setContentView(R.layout.information);
-        informationView = (View) findViewById(R.id.informationView);
+        nutritionView = (View) findViewById(R.id.nutritionView);
 
         setContentView(R.layout.settings);
-        settingView = (View) findViewById(R.id.settingView);
+        settingsView = (View) findViewById(R.id.settingsView);
 
         setContentView(mainView);
 
