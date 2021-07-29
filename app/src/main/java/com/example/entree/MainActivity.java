@@ -14,6 +14,7 @@ import android.provider.MediaStore;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -115,9 +116,6 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d("IngredientText", "Ingredient text is null = " + (ingredientText == null));
 
-        setContentView(R.layout.information);
-        nutritionView = (View) findViewById(R.id.nutritionView);
-
         setContentView(R.layout.settings);
         settingsView = (View) findViewById(R.id.settingsView);
 
@@ -136,6 +134,14 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("Gallery", "Gallery opened");
             }
         });
+
+        Log.d("ApplicationTheme", getApplication().getTheme().toString());
+        Log.d("ApplicationTheme", this.getTheme().toString());
+
+        MenuBarsView menuBars = new MenuBarsView(this, null);
+//        ((ViewGroup)mainView.getParent()).removeView(mainView);
+        setContentView(menuBars);
+
     }
 
     private void openGallery() {

@@ -7,4 +7,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="entree_orange">#FB8A00</color>
+    <color name="entree_dark_orange">#EF6A01</color>
+    <color name="entree_light_orange">#FFA525</color>
+
+    <color name="entree_red">#FB0D00</color>
+    <color name="entree_dark_red">#D60000</color>
+    <color name="entree_light_red">#FF250C</color>
 </resources>

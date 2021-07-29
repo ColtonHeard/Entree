@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Entree</string>
+    <string name="camera_icon_name">Camera</string>
+    <string name="ingredients_icon_name">Ingredients</string>
+    <string name="recipes_icon_name">Recipes</string>
+    <string name="title_activity_main2">MainActivity2</string>
 </resources>
