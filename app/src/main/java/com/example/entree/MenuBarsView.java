@@ -125,7 +125,7 @@ public class MenuBarsView extends EntreeConstraintView implements NavigationView
             this.removeView(subView);
         }
         subView = v;
-        this.addView(v);
+        this.addView(v, new ConstraintLayout.LayoutParams(LayoutParams.MATCH_PARENT, 0));
 
         set.clone(this);
 

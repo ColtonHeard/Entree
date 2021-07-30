@@ -3,7 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/Colton/StudioProjects/Entree/app/src/main/res/layout/activity_main.xml" value="0.16058763931104356" />
+        <entry key="..\:/Users/Colton/StudioProjects/Entree/app/src/main/res/drawable/add_image.xml" value="0.42685185185185187" />
+        <entry key="..\:/Users/Colton/StudioProjects/Entree/app/src/main/res/layout/activity_main.xml" value="0.5" />
       </map>
     </option>
   </component>
@@ -12,5 +13,8 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="SuppressKotlinCodeStyleNotification">
+    <option name="disableForAll" value="true" />
   </component>
 </project>

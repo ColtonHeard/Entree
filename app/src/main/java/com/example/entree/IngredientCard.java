@@ -53,7 +53,7 @@ public class IngredientCard extends MaterialCardView
         set = new ConstraintSet();
         layout = new ConstraintLayout(context, attrs);
 
-        this.addView(layout, new FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
+        this.addView(layout);
 
         //instantiate objects
         image = new ImageView(layout.getContext(), attrs);
@@ -61,7 +61,7 @@ public class IngredientCard extends MaterialCardView
         image.setScaleType(ImageView.ScaleType.FIT_XY);
         image.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.foodimage));
 
-        layout.addView(image, new ConstraintLayout.LayoutParams(LayoutParams.MATCH_PARENT, 0));
+        layout.addView(image);
 
         title = new TextView(layout.getContext(), attrs);
         title.setId(TextView.generateViewId());
@@ -74,6 +74,7 @@ public class IngredientCard extends MaterialCardView
         text = new TextView(layout.getContext(), attrs);
         text.setId(TextView.generateViewId());
         text.setText("Description");
+        text.setTextColor(getResources().getColor(R.color.light_gray));
         text.setTextSize(15);
 
         layout.addView(text);
@@ -109,10 +110,15 @@ public class IngredientCard extends MaterialCardView
         set.create(textBottomGuideline, ConstraintSet.HORIZONTAL_GUIDELINE);
         set.create(sideGuideline, ConstraintSet.VERTICAL_GUIDELINE);
 
-        set.setGuidelineEnd(imageBottomGuideline, dpToPx(IMAGE_BOTTOM_MARGIN, getContext()));
-        set.setGuidelineEnd(titleBottomGuideline, dpToPx(TITLE_BOTTOM_MARGIN, getContext()));
-        set.setGuidelineEnd(textBottomGuideline, dpToPx(TEXT_BOTTOM_MARGIN, getContext()));
+        set.setGuidelinePercent(imageBottomGuideline, 0.75f);
+        set.setGuidelinePercent(titleBottomGuideline, 0.85f);
+        set.setGuidelinePercent(textBottomGuideline, 0.95f);
         set.setGuidelineBegin(sideGuideline, dpToPx(SIDE_MARGIN, getContext()));
+
+//        set.setGuidelineEnd(imageBottomGuideline, dpToPx(IMAGE_BOTTOM_MARGIN, getContext()));
+//        set.setGuidelineEnd(titleBottomGuideline, dpToPx(TITLE_BOTTOM_MARGIN, getContext()));
+//        set.setGuidelineEnd(textBottomGuideline, dpToPx(TEXT_BOTTOM_MARGIN, getContext()));
+//        set.setGuidelineBegin(sideGuideline, dpToPx(SIDE_MARGIN, getContext()));
     }
 
     /*
