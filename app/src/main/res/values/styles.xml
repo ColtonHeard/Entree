@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="IconButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:paddingLeft">2dp</item>
+        <item name="android:paddingRight">2dp</item>
+        <item name="android:layout_gravity">end</item>
+        <item name="android:minWidth">40dip</item>
+        <item name="android:background">@color/entree_orange</item>
+        <item name="android:stateListAnimator">@animator/mtrl_btn_unelevated_state_list_anim</item>
+    </style>
+
+</resources>

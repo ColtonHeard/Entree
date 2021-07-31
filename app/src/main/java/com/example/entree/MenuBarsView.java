@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.compose.ui.platform.ComposeView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -54,14 +55,15 @@ public class MenuBarsView extends EntreeConstraintView implements NavigationView
     The Material Design toolbar that represents this view's top action bar.
      */
     private MaterialToolbar topBar;
+    private AppCompatActivity activity;
 
-    public MenuBarsView(@NonNull Context context, @Nullable AttributeSet attrs)
+    public MenuBarsView(@NonNull Context context, @Nullable AttributeSet attrs, MainActivity mainActivity)
     {
         super(context, attrs);
-
+        activity = mainActivity;
         //Keep track of view size, may be null, also for resizing components later
 
-        cameraView = new CameraView(context, attrs);
+        cameraView = new CameraView(context, attrs, mainActivity);
         ingredientView = new IngredientView(context, attrs);
         recipeView = new RecipeView(context, attrs);
 
