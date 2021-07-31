@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -209,13 +210,32 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
         set.setGuidelineEnd(bottomGuideline, dpToPx(BOTTOM_GUIDELINE_MARGIN, getContext()));
     }
 
+    /*
+    Method that handles changing the subview. Performs any cleanup work needed such as ensuring colors are correct for the view.
+     */
+    private void switchView(View v)
+    {
+        setColors(getResources().getColor(R.color.entree_orange));
+        changeView(v);
+    }
+
+    private void setColors(@ColorInt int color)
+    {
+        topBar.setBackgroundColor(color);
+        bottomView.setBackgroundColor(color);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            activity.getWindow().setStatusBarColor(color);
+        }
+    }
+
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item)
     {
         if (item == cameraMenuItem)
         {
             topBar.setTitle("Camera");
-            changeView(cameraView);
+            switchView(cameraView);
             removeAllActionButtons();
             topBar.addView(cameraMore);
             return true;
@@ -223,17 +243,23 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
         else if (item == ingredientMenuItem)
         {
             topBar.setTitle("Ingredient List");
-            changeView(ingredientScroll);
+            switchView(ingredientScroll);
             removeAllActionButtons();
             topBar.addView(ingredientMore);
             topBar.addView(editIngredients);
             topBar.addView(addIngredient);
+
+            if (ingredientView.isEditing())
+            {
+                setColors(getResources().getColor(R.color.entree_red));
+            }
+
             return true;
         }
         else if (item == recipeMenuItem)
         {
             topBar.setTitle("Recipes");
-            changeView(recipeView);
+            switchView(recipeView);
             removeAllActionButtons();
             return true;
         }
@@ -256,6 +282,8 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
         if (v == addIngredient)
         {
             ingredientView.addCard();
+            ingredientScroll.computeScroll();
+            ingredientScroll.fullScroll(ScrollView.FOCUS_DOWN);
         }
         else if (v == ingredientMore)
         {
@@ -266,19 +294,11 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
             ingredientView.enableEditing();
             if (ingredientView.isEditing())
             {
-                topBar.setBackgroundColor(getResources().getColor(R.color.entree_red));
-                bottomView.setBackgroundColor(getResources().getColor(R.color.entree_red));
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    activity.getWindow().setStatusBarColor(ContextCompat.getColor(activity.getApplicationContext(), R.color.entree_red));
-                }
+                setColors(getResources().getColor(R.color.entree_red));
             }
             else
             {
-                topBar.setBackgroundColor(getResources().getColor(R.color.entree_orange));
-                bottomView.setBackgroundColor(getResources().getColor(R.color.entree_orange));
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    activity.getWindow().setStatusBarColor(ContextCompat.getColor(activity.getApplicationContext(), R.color.entree_orange));
-                }
+                setColors(getResources().getColor(R.color.entree_orange));
             }
         }
         else if (v == cameraMore)
