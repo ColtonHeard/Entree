@@ -298,4 +298,42 @@ public class MainActivity extends AppCompatActivity {
         //Attach the canvas to the ImageView
         view.setImageDrawable(new BitmapDrawable(getResources(), tempBitmap));
     }
+    
+    private void getWebsite()
+    {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final StringBuilder builder = new StringBuilder();
+
+                try {
+                    Document doc = Jsoup.connect("https://www.google.com/search?q=" + food1 + "+recipes").get();
+                    String title = doc.title();
+                    Elements links = doc.select("a[href]");
+
+                    builder.append(title).append("\n");
+
+                    for(Element link: links)
+                    {
+                        if(!link.text().equals("Images") && !link.text().equals("Videos") && !link.text().equals("News") && !link.text().equals("Maps")
+                        && !link.text().equals("Shopping") && !link.text().equals("Books") && !link.text().equals("Flights") && !link.text().equals("More results")
+                        && !link.text().equals("Feedback") && !link.text().equals("")) {
+                            builder.append("------------------").append("\n").append("Link : ").append(link.attr("href"))
+                                    .append("\n").append("Title : ").append(link.text()).append("\n");
+                        }
+                    }
+                } catch (IOException e)
+                {
+                    builder.append("Error :").append(e.getMessage()).append("\n");
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ingredientText.setText(builder.toString());
+                    }
+                });
+            }
+        }).start();
+    }
 }
