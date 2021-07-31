@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     FoodData Data;
     View mainView, ingredientView, settingsView, nutritionView;
     Boolean dataHasNotBeenRead = true;
+    CameraView camera;
 
     public void cameraButton(View view) {
         /**This is where the camera should open when the camera button is clicked. Proper permissions are already provided
@@ -144,7 +145,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void openGallery() {
+    public void setCameraView(CameraView v){
+        camera = v;
+    }
+
+    public void openGallery() {
         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(gallery, PICK_IMAGE);
     }
@@ -153,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == PICK_IMAGE){
             imageUri = data.getData();
-            imageView.setImageURI(imageUri);
+            camera.setImageURI(imageUri);
 
             Bitmap image = null;
             try {
@@ -189,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
                         ingredientText.setText(s);
                         ingredientText.setTextSize(20);
 
-                        paintBoundingBoxes(recognizer.getFoundObjects(), finalImage);
+//                        paintBoundingBoxes(recognizer.getFoundObjects(), finalImage);
                     }
                 }, 2000);
             }
@@ -270,32 +275,5 @@ public class MainActivity extends AppCompatActivity {
         } else {
             nutritionFactsLabel.setText("Nutrition Facts: " + food.getName());
         }
-    }
-
-    /*
-    Paints the bounding boxes of any food objects that have been recognized by the AI.
-    Does so by painting transparent boxes over the imageview's content, then updating the image view.
-     */
-    private void paintBoundingBoxes(List<DetectedObject> foundObjects, Bitmap imageBitmap)
-    {
-        ImageView view = (ImageView) findViewById(R.id.imageView);
-
-        //Create a new image bitmap and attach a brand new canvas to it
-        Bitmap tempBitmap = Bitmap.createBitmap(imageBitmap.getWidth(), imageBitmap.getHeight(), Bitmap.Config.RGB_565);
-        Canvas tempCanvas = new Canvas(tempBitmap);
-        Paint paint = new Paint();
-        paint.setColor(getResources().getColor(R.color.purple_500));
-        paint.setAlpha(60);
-
-        //Draw the image bitmap into the canvas
-        tempCanvas.drawBitmap(imageBitmap, 0, 0, null);
-
-        for (DetectedObject obj: foundObjects)
-        {
-            tempCanvas.drawRect(obj.getBoundingBox(), paint);
-        }
-
-        //Attach the canvas to the ImageView
-        view.setImageDrawable(new BitmapDrawable(getResources(), tempBitmap));
     }
 }

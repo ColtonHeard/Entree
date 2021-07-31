@@ -20,6 +20,7 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.widget.Toolbar;
@@ -79,11 +80,10 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
     {
         super(context, attrs);
         activity = mainActivity;
-
+        
         //Keep track of view size, may be null, also for resizing components later
 
-        cameraView = new CameraView(context, attrs);
-
+        cameraView = new CameraView(context, attrs, mainActivity);
         ingredientView = new IngredientView(context, attrs);
         ingredientScroll = new ScrollView(context, attrs);
         ingredientScroll.setId(ScrollView.generateViewId());

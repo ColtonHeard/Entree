@@ -3,7 +3,7 @@
     <style name="Theme.Entree" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/white</item>
-        <item name="colorSecondary">@color/black</item>
+        <item name="colorSecondary">@color/entree_red</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/entree_orange</item>
 
@@ -12,7 +12,7 @@
         <item name="colorSecondaryVariant">@color/entree_dark_red</item>
         <item name="colorSurface">@color/white</item>
         <item name="colorOnPrimary">@color/white</item>
-        <item name="colorOnSecondary">@color/entree_red</item>
+        <item name="colorOnSecondary">@color/white</item>
         <item name="colorOnBackground">@color/entree_light_orange</item>
         <item name="colorOnError">@color/entree_red</item>
         <item name="colorOnSurface">@color/white</item>
