@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d("ApplicationTheme", getApplication().getTheme().toString());
         Log.d("ApplicationTheme", this.getTheme().toString());
 
-        MenuBarsView menuBars = new MenuBarsView(this, null);
+        MenuBarsView menuBars = new MenuBarsView(this, null, this);
 //        ((ViewGroup)mainView.getParent()).removeView(mainView);
         setContentView(menuBars);
 

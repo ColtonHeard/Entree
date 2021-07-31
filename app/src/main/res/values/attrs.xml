@@ -6,5 +6,7 @@
             <enum name="left" value="0"/>
             <enum name="right" value="1"/>
         </attr>
+        <attr name="actionBarButtonType" format="reference"/>
+        <attr name="iconButtonType" format="reference"/>
     </declare-styleable>
 </resources>
