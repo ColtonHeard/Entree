@@ -136,6 +136,8 @@ public class RecipeView extends EntreeConstraintView
         {
             addChip();
         }
+
+        recipeList.addView(new IngredientCard(context, attrs));
     }
 
     public void addChip()

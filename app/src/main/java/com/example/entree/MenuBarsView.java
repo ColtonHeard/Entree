@@ -75,7 +75,7 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
     private BottomNavigationView bottomView;
     private AppCompatActivity activity;
 
-    public MenuBarsView(@NonNull Context context, @Nullable AttributeSet attrs, AppCompatActivity mainActivity)
+    public MenuBarsView(@NonNull Context context, @Nullable AttributeSet attrs, MainActivity mainActivity)
     {
         super(context, attrs);
         activity = mainActivity;
