@@ -1,5 +1,6 @@
 package com.example.entree;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -28,6 +29,8 @@ import com.google.mlkit.vision.objects.DetectedObject;
 
 import java.io.IOException;
 import java.util.List;
+
+import java.net.URI;
 
 public class CameraView extends EntreeConstraintView
 {

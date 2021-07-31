@@ -1,8 +1,11 @@
 package com.example.entree;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Typeface;
+import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -16,7 +19,7 @@ import androidx.constraintlayout.widget.Guideline;
 
 import com.google.android.material.card.MaterialCardView;
 
-public class IngredientCard extends MaterialCardView
+public class IngredientCard extends MaterialCardView implements View.OnClickListener
 {
     /*
     Constants for specifying which side of a view to connect a constraint to.
@@ -34,7 +37,7 @@ public class IngredientCard extends MaterialCardView
     private int imageBottomGuideline;
     private int titleBottomGuideline;
     private int textBottomGuideline;
-    private int sideGuideline;
+    private int leftSideGuideline, rightSideGuideline;
 
     private ConstraintLayout layout;
     private ConstraintSet set;
@@ -46,6 +49,20 @@ public class IngredientCard extends MaterialCardView
     {
         super(context, attrs);
         setId(generateViewId());
+        this.setCardElevation(2);
+        this.setCheckedIcon(AppCompatResources.getDrawable(context, R.drawable.close_icon));
+
+        int[][] states = new int[][] {
+                new int[] {android.R.attr.state_checked} // checked
+        };
+
+        int[] colors = new int[] {
+                getResources().getColor(R.color.entree_dark_red),
+        };
+        ColorStateList list = new ColorStateList(states, colors);
+
+        this.setCheckedIconTint(list);
+        this.setOnClickListener(this);
 
 //        setContentPadding(int left, int top, int right, int bottom)
         setRadius(10);
@@ -59,25 +76,37 @@ public class IngredientCard extends MaterialCardView
         image = new ImageView(layout.getContext(), attrs);
         image.setId(ImageView.generateViewId());
         image.setScaleType(ImageView.ScaleType.FIT_XY);
-        image.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.foodimage));
+        image.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.food_card_test_image));
 
+        //344, 194 -
+//        layout.addView(image, new ConstraintLayout.LayoutParams(dpToPx(172, context), dpToPx(97, context)));
         layout.addView(image);
 
         title = new TextView(layout.getContext(), attrs);
         title.setId(TextView.generateViewId());
         title.setText("Ingredient Name");
         title.setTypeface(title.getTypeface(), Typeface.BOLD);
-        title.setTextSize(17);
+        title.setTextSize(12);
+        title.setGravity(Gravity.BOTTOM | Gravity.LEFT);
 
-        layout.addView(title);
+        layout.addView(title, new ConstraintLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT));
+
+        String testDescription = "Description";
+
+        for (int i = 0; i < ((int) (Math.random() * 10)); i++)
+        {
+            testDescription += " details";
+        }
 
         text = new TextView(layout.getContext(), attrs);
         text.setId(TextView.generateViewId());
-        text.setText("Description");
+        text.setText(testDescription);
         text.setTextColor(getResources().getColor(R.color.light_gray));
-        text.setTextSize(15);
+        text.setTextSize(8);
+        text.setMaxLines(3);
+        text.setEllipsize(TextUtils.TruncateAt.END);
 
-        layout.addView(text);
+        layout.addView(text, new ConstraintLayout.LayoutParams(0, 0));
 
         //layout constraints
         set.clone(layout);
@@ -89,11 +118,15 @@ public class IngredientCard extends MaterialCardView
         to(image, BOTTOM, imageBottomGuideline, TOP);
         to(image, RIGHT, this, RIGHT);
 
-        to(title, LEFT, sideGuideline, RIGHT);
+        to(title, LEFT, leftSideGuideline, RIGHT);
         to(title, BOTTOM, titleBottomGuideline, TOP);
+        to(title, RIGHT, rightSideGuideline, LEFT);
+        to(title, TOP, image, BOTTOM);
 
-        to(text, LEFT, sideGuideline, RIGHT);
+        to(text, LEFT, leftSideGuideline, RIGHT);
         to(text, BOTTOM, textBottomGuideline, TOP);
+        to(text, RIGHT, rightSideGuideline, LEFT);
+        to(text, TOP, title, BOTTOM);
 
         set.applyTo(layout);
     }
@@ -103,22 +136,38 @@ public class IngredientCard extends MaterialCardView
         imageBottomGuideline = Guideline.generateViewId();
         titleBottomGuideline = Guideline.generateViewId();
         textBottomGuideline = Guideline.generateViewId();
-        sideGuideline = Guideline.generateViewId();
+        leftSideGuideline = Guideline.generateViewId();
+        rightSideGuideline = Guideline.generateViewId();
 
         set.create(imageBottomGuideline, ConstraintSet.HORIZONTAL_GUIDELINE);
         set.create(titleBottomGuideline, ConstraintSet.HORIZONTAL_GUIDELINE);
         set.create(textBottomGuideline, ConstraintSet.HORIZONTAL_GUIDELINE);
-        set.create(sideGuideline, ConstraintSet.VERTICAL_GUIDELINE);
+        set.create(leftSideGuideline, ConstraintSet.VERTICAL_GUIDELINE);
+        set.create(rightSideGuideline, ConstraintSet.VERTICAL_GUIDELINE);
 
-        set.setGuidelinePercent(imageBottomGuideline, 0.75f);
-        set.setGuidelinePercent(titleBottomGuideline, 0.85f);
+        set.setGuidelinePercent(imageBottomGuideline, 0.65f);
+        set.setGuidelinePercent(titleBottomGuideline, 0.80f);
         set.setGuidelinePercent(textBottomGuideline, 0.95f);
-        set.setGuidelineBegin(sideGuideline, dpToPx(SIDE_MARGIN, getContext()));
+        set.setGuidelinePercent(leftSideGuideline, 0.05f);
+        set.setGuidelinePercent(rightSideGuideline, 0.95f);
+//        set.setGuidelineBegin(leftSideGuideline, dpToPx(SIDE_MARGIN, getContext()));
+//        set.setGuidelineEnd(rightSideGuideline, dpToPx(SIDE_MARGIN, getContext()));
 
 //        set.setGuidelineEnd(imageBottomGuideline, dpToPx(IMAGE_BOTTOM_MARGIN, getContext()));
 //        set.setGuidelineEnd(titleBottomGuideline, dpToPx(TITLE_BOTTOM_MARGIN, getContext()));
 //        set.setGuidelineEnd(textBottomGuideline, dpToPx(TEXT_BOTTOM_MARGIN, getContext()));
 //        set.setGuidelineBegin(sideGuideline, dpToPx(SIDE_MARGIN, getContext()));
+    }
+
+    public void enableChecking()
+    {
+        this.setCheckable(true);
+    }
+
+    public void disableChecking()
+    {
+        this.setChecked(false);
+        this.setCheckable(false);
     }
 
     /*
@@ -144,5 +193,23 @@ public class IngredientCard extends MaterialCardView
                 .getDisplayMetrics()
                 .density;
         return Math.round((float) dp * density);
+    }
+
+    public void deleteCard()
+    {
+        ((ViewGroup) getParent()).removeView(this);
+    }
+
+    @Override
+    public void onClick(View v)
+    {
+        if (isCheckable())
+        {
+            setChecked(!isChecked());
+        }
+        else
+        {
+            //Open more nutrition information
+        }
     }
 }
