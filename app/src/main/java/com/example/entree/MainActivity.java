@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
         imageView = (ImageView)findViewById(R.id.imageView);
         button = (Button)findViewById(R.id.buttonLoadPicture);
 
-        recognizer = new FoodObjectRecognizer();
+//        recognizer = new FoodObjectRecognizer();
         Data = new FoodData();
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -154,50 +154,53 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(gallery, PICK_IMAGE);
     }
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == PICK_IMAGE){
+
+        if (resultCode == RESULT_OK && requestCode == PICK_IMAGE)
+        {
             imageUri = data.getData();
             camera.setImageURI(imageUri);
 
-            Bitmap image = null;
-            try {
-                image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            if (image == null)
-            {
-                Log.d("BitmapLoad", "Failed to create bitmap from file uri");
-            }
-            else
-            {
-                Log.d("BitmapLoad", "Successfully made bitmap from file uri");
-                recognizer.processImage(image);
-
-                Handler handler = new Handler();
-                Bitmap finalImage = image;
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        for (String s : recognizer.getObjectsInfo())
-                        {
-                            Log.d("AIInfo", s);
-                        }
-
-                        String s = "";
-                        for (String str : recognizer.getObjectsInfo())
-                        {
-                            s += str + "\n\n";
-                        }
-                        ingredientText.setText(s);
-                        ingredientText.setTextSize(20);
-
-//                        paintBoundingBoxes(recognizer.getFoundObjects(), finalImage);
-                    }
-                }, 2000);
-            }
+//            Bitmap image = null;
+//            try {
+//                image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//            if (image == null)
+//            {
+//                Log.d("BitmapLoad", "Failed to create bitmap from file uri");
+//            }
+//            else
+//            {
+//                Log.d("BitmapLoad", "Successfully made bitmap from file uri");
+//                recognizer.processImage(image);
+//
+//                Handler handler = new Handler();
+//                Bitmap finalImage = image;
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        for (String s : recognizer.getObjectsInfo())
+//                        {
+//                            Log.d("AIInfo", s);
+//                        }
+//
+//                        String s = "";
+//                        for (String str : recognizer.getObjectsInfo())
+//                        {
+//                            s += str + "\n\n";
+//                        }
+//                        ingredientText.setText(s);
+//                        ingredientText.setTextSize(20);
+//
+////                        paintBoundingBoxes(recognizer.getFoundObjects(), finalImage);
+//                    }
+//                }, 2000);
+//            }
 
         }
     }

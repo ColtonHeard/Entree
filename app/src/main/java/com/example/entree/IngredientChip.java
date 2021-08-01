@@ -11,10 +11,13 @@ import com.google.android.material.chip.Chip;
 public class IngredientChip extends Chip
 {
 
-    public IngredientChip(Context context, AttributeSet attrs)
+    private String randomLabel;
+
+    public IngredientChip(Context context, AttributeSet attrs, RecipeView recipe)
     {
         super(context, attrs);
 
+        this.setOnClickListener(recipe);
         this.setCheckable(true);
         this.setCheckedIconVisible(true);
         this.setCheckedIcon(AppCompatResources.getDrawable(getContext(), R.drawable.dark_check_icon));
@@ -39,6 +42,18 @@ public class IngredientChip extends Chip
             text += "-indent";
         }
 
+        randomLabel = text;
         this.setText(text);
+    }
+
+    public void setChipText(String text)
+    {
+        if (text != null) {
+            this.setText(text);
+        }
+        else
+        {
+            this.setText(randomLabel);
+        }
     }
 }

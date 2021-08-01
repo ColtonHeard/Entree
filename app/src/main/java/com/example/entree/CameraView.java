@@ -32,7 +32,7 @@ import java.util.List;
 
 import java.net.URI;
 
-public class CameraView extends EntreeConstraintView
+public class CameraView extends EntreeConstraintView implements View.OnLongClickListener
 {
     MainActivity activity;
     ImageView pic;
@@ -43,7 +43,7 @@ Constants for the margin at which guideline's should be placed from the edge of 
     private final int TOP_GUIDELINE_MARGIN = 56;
     private final int BOTTOMBUTTON_GUIDELINE_MARGIN = 25;
     private final int TOPSeventyFive_GUIDELINE_MARGIN = 100;
-    private final int MIDDLE_GUIDELINE_MARGIN = 350;
+    private final int MIDDLE_GUIDELINE_MARGIN = 340;
 
     /*
     Variables for holding the id's of the guideline helper UI objects.
@@ -55,10 +55,15 @@ Constants for the margin at which guideline's should be placed from the edge of 
     private int bottomButton;
     private int middleGuideline;
 
+    private FoodObjectRecognizer recognizer;
+
     public CameraView(@NonNull Context context, @Nullable AttributeSet attrs, MainActivity mainActivity)
     {
         super(context, attrs);
 
+        this.setOnLongClickListener(this);
+
+        recognizer = new FoodObjectRecognizer(this ,mainActivity);
         activity = mainActivity;
         activity.setCameraView(this);
         pic = new ImageView(context, attrs);
@@ -116,8 +121,15 @@ Constants for the margin at which guideline's should be placed from the edge of 
         return fab;
     }
 
-    public void setImageURI(Uri imageUri) {
+    public void setImageURI(Uri imageUri)
+    {
        pic.setImageURI(imageUri);
+        try {
+            Bitmap image = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), imageUri);
+            recognizer.processImage(image);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /*
@@ -167,5 +179,12 @@ Constants for the margin at which guideline's should be placed from the edge of 
         set.create(middleGuideline, ConstraintSet.VERTICAL_GUIDELINE);
 
         set.setGuidelineBegin(middleGuideline, dpToPx(MIDDLE_GUIDELINE_MARGIN, getContext()));
+    }
+
+    @Override
+    public boolean onLongClick(View v)
+    {
+        paintBoundingBoxes(recognizer.getFoundObjects(), ((BitmapDrawable) pic.getDrawable()).getBitmap());
+        return true;
     }
 }

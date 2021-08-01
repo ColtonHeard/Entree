@@ -90,7 +90,7 @@ public class IngredientView extends EntreeConstraintView
         this.setConstraintSet(set);
         set.applyTo(this);
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 5; i++)
         {
             addCard();
         }

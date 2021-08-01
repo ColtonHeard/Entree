@@ -29,11 +29,6 @@ public class IngredientCard extends MaterialCardView implements View.OnClickList
     protected final int TOP = ConstraintSet.TOP;
     protected final int BOTTOM = ConstraintSet.BOTTOM;
 
-    private final int IMAGE_BOTTOM_MARGIN = 116;
-    private final int TITLE_BOTTOM_MARGIN = 72;
-    private final int TEXT_BOTTOM_MARGIN = 44;
-    private final int SIDE_MARGIN = 16;
-
     private int imageBottomGuideline;
     private int titleBottomGuideline;
     private int textBottomGuideline;
@@ -150,13 +145,6 @@ public class IngredientCard extends MaterialCardView implements View.OnClickList
         set.setGuidelinePercent(textBottomGuideline, 0.95f);
         set.setGuidelinePercent(leftSideGuideline, 0.05f);
         set.setGuidelinePercent(rightSideGuideline, 0.95f);
-//        set.setGuidelineBegin(leftSideGuideline, dpToPx(SIDE_MARGIN, getContext()));
-//        set.setGuidelineEnd(rightSideGuideline, dpToPx(SIDE_MARGIN, getContext()));
-
-//        set.setGuidelineEnd(imageBottomGuideline, dpToPx(IMAGE_BOTTOM_MARGIN, getContext()));
-//        set.setGuidelineEnd(titleBottomGuideline, dpToPx(TITLE_BOTTOM_MARGIN, getContext()));
-//        set.setGuidelineEnd(textBottomGuideline, dpToPx(TEXT_BOTTOM_MARGIN, getContext()));
-//        set.setGuidelineBegin(sideGuideline, dpToPx(SIDE_MARGIN, getContext()));
     }
 
     public void enableChecking()
@@ -185,14 +173,6 @@ public class IngredientCard extends MaterialCardView implements View.OnClickList
     protected void to(View a, int from, int guidelineID, int to)
     {
         set.connect(a.getId(), from, guidelineID, to);
-    }
-
-    private int dpToPx(int dp, Context context)
-    {
-        float density = context.getResources()
-                .getDisplayMetrics()
-                .density;
-        return Math.round((float) dp * density);
     }
 
     public void deleteCard()

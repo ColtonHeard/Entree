@@ -89,7 +89,7 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
         ingredientScroll.setId(ScrollView.generateViewId());
         ingredientScroll.addView(ingredientView);
 
-        recipeView = new RecipeView(context, attrs);
+        recipeView = new RecipeView(context, attrs, mainActivity);
 
         //Create and setup the top action bar
         topBar = new MaterialToolbar(context, attrs);

@@ -7,6 +7,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.renderscript.ScriptGroup;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 
@@ -28,9 +29,14 @@ public class FoodObjectRecognizer
 
     private ArrayList<DetectedObject> foundObjects;
     private ObjectDetector detector;
+    private CameraView view;
+    private MainActivity mainActivity;
 
-    public FoodObjectRecognizer()
+    public FoodObjectRecognizer(CameraView v, MainActivity main)
     {
+        view = v;
+        mainActivity = main;
+
         ObjectDetectorOptions options = new ObjectDetectorOptions.Builder()
                 .setDetectorMode(ObjectDetectorOptions.SINGLE_IMAGE_MODE)
                 .enableMultipleObjects()
@@ -49,7 +55,8 @@ public class FoodObjectRecognizer
                 .addOnSuccessListener(
                         new OnSuccessListener<List<DetectedObject>>() {
                             @Override
-                            public void onSuccess(List<DetectedObject> detectedObjects) {
+                            public void onSuccess(List<DetectedObject> detectedObjects)
+                            {
                                 //Task completed successfully
                                 //System.out.println("Object detector process() finished successfully")
 
@@ -72,6 +79,12 @@ public class FoodObjectRecognizer
                                 }
 
                                 foundObjects = foodObjects;
+                                mainActivity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        view.performLongClick();
+                                    }
+                                });
                             }
                         })
                 .addOnFailureListener(
