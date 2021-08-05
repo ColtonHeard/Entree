@@ -16,6 +16,9 @@ import androidx.constraintlayout.widget.Guideline;
 
 import org.w3c.dom.Text;
 
+/*
+WIP class for displaying an ingredient's nutritional information.
+ */
 public class NutritionView extends ConstraintLayout
 {
     /*
@@ -159,5 +162,48 @@ public class NutritionView extends ConstraintLayout
     {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
+
+//    Boolean dataHasNotBeenRead = true;
+
+//    public void searchClick(View view)
+//    {
+//        if (dataHasNotBeenRead)
+//        {
+//            readFoodData();
+//            dataHasNotBeenRead = false;
+//        }
+//        FoodData food = null;
+//
+//        if ((food = foodMap.get(IngredientSearch.getText().toString().toLowerCase())) != null)
+//        {
+//            setupLabel(food);
+//        }
+//        else
+//        {
+//            setupLabel(new FoodData());
+//        }
+//    }
+//
+//    private void setupLabel(FoodData food){
+//        calorieAmount.setText(food.getCalories());
+//        fatAmount.setText(food.getFat());
+//        saturatedFatAmount.setText(food.getSaturated());
+//        cholesterolAmount.setText(food.getCholesterol());
+//        sodiumAmount.setText(food.getSodium());
+//        carbAmount.setText(food.getCarbs());
+//        fiberAmount.setText(food.getFiber());
+//        totalSugarAmount.setText(food.getSugar());
+//        proteinAmount.setText(food.getProtein());
+//        vitaminDAmount.setText(food.getVitaminD());
+//        calciumAmount.setText(food.getCalcium());
+//        ironAmount.setText(food.getIron());
+//        potassiumAmount.setText(food.getPotassium());
+//
+//        if(food.getName().equals("None")){
+//            nutritionFactsLabel.setText("Nutrition Facts");
+//        } else {
+//            nutritionFactsLabel.setText("Nutrition Facts: " + food.getName());
+//        }
+//    }
 
 }

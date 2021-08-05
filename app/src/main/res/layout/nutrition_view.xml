@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".IngredientList">
+    tools:context=".MainActivity">
 
     <EditText
         android:id="@+id/IngredientSearch"
@@ -28,8 +28,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/IngredientSearch"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/search_icon_for_android_15" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/nutritionFactsLabel"
@@ -747,11 +746,11 @@
         app:layout_constraintTop_toBottomOf="@+id/potassiumDivider"
         tools:layout_editor_absoluteX="248dp" />
 
+    <!--> android:onClick="ingredientReturnOnClick" <!-->
     <Button
         android:id="@+id/returnButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="ingredientReturnOnClick"
         android:text="Return"
         app:backgroundTint="#F44336"
         app:layout_constraintBottom_toBottomOf="parent"

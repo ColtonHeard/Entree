@@ -21,6 +21,10 @@ import com.google.android.material.card.MaterialCardView;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+/*
+Represents a list-type view containing all of the detected or user-input ingredients in Material Design cards.
+Has functionality for editing and adjusting the contained list.
+ */
 public class IngredientView extends EntreeConstraintView
 {
 
@@ -36,12 +40,18 @@ public class IngredientView extends EntreeConstraintView
     private int secondLeftGuideline, secondRightGuideline;
     private int leftMiddleGuideline, rightMiddleGuideline;
 
-    private LinearLayout left, right;
+    // ArrayList of all IngredientCards currently added to this view.
     private ArrayList<IngredientCard> cards;
 
+    // THe number of IngredientCards currently contained in this view.
     private int count;
+
+    // Boolean depicting whether or not the view is in edit mode.
     private boolean editing;
 
+    /*
+    Initializes the view and adds 5 dummy cards.
+     */
     public IngredientView(@NonNull Context context, @Nullable AttributeSet attrs)
     {
         super(context, attrs);
@@ -50,42 +60,10 @@ public class IngredientView extends EntreeConstraintView
         editing = false;
         cards = new ArrayList<>();
 
-        //Initialize Content
-//        left = new LinearLayout(context, attrs);
-//        left.setId(LinearLayout.generateViewId());
-//        left.setBackgroundColor(getResources().getColor(R.color.light_gray));
-//        left.setOrientation(LinearLayout.VERTICAL);
-//        left.addView(new IngredientCard(context, attrs));
-//
-//        this.addView(left, new ConstraintLayout.LayoutParams(0, 0));
-//
-//        right = new LinearLayout(context, attrs);
-//        right.setId(LinearLayout.generateViewId());
-//        left.setBackgroundColor(getResources().getColor(R.color.entree_red));
-//        left.setOrientation(LinearLayout.VERTICAL);
-//        right.addView(new IngredientCard(context, attrs));
-//
-//        this.addView(right, new ConstraintLayout.LayoutParams(0, 0));
-
-//        card.setOnLongClickListener {
-//            card.setChecked(!card.isChecked)
-//            true
-//        }
-
         //Setup Constraints
         set.clone(this);
 
         initializeGuidelines();
-
-//        to(left, TOP, topGuideline, BOTTOM);
-//        to(left, LEFT, firstLeftGuideline, RIGHT);
-//        to(left, RIGHT, leftMiddleGuideline, LEFT);
-//        to(left, BOTTOM, this, BOTTOM);
-//
-//        to(right, TOP, topGuideline, BOTTOM);
-//        to(right, LEFT, rightMiddleGuideline, RIGHT);
-//        to(right, RIGHT, secondRightGuideline, LEFT);
-//        to(right, BOTTOM, this, BOTTOM);
 
         this.setConstraintSet(set);
         set.applyTo(this);
@@ -96,6 +74,9 @@ public class IngredientView extends EntreeConstraintView
         }
     }
 
+    /*
+    Adds a new IngredientCard to this view and lays it out accordingly.
+     */
     public void addCard()
     {
         IngredientCard card = new IngredientCard(getContext(), null);
@@ -150,6 +131,9 @@ public class IngredientView extends EntreeConstraintView
         set.applyTo(this);
     }
 
+    /*
+    Adds the passed IngredientCard to this view and lays it out accordingly.
+     */
     private void addCard(IngredientCard card)
     {
         this.addView(card, new ConstraintLayout.LayoutParams(0, 0));
@@ -202,6 +186,9 @@ public class IngredientView extends EntreeConstraintView
         set.applyTo(this);
     }
 
+    /*
+    Rebinds the constraints of all cards. Called after cards are removed via edit mode.
+     */
     private void relayoutCards()
     {
         count = 0;
@@ -213,6 +200,9 @@ public class IngredientView extends EntreeConstraintView
         }
     }
 
+    /*
+    Toggles edit mode, either enabling it and checking functionality on all contained IngredientCards or removing any checked IngredientCards.
+     */
     public void enableEditing()
     {
         editing = !editing;
@@ -225,11 +215,17 @@ public class IngredientView extends EntreeConstraintView
         toggleEditing(editing);
     }
 
+    /*
+    Returns a boolean depicting whether or not the view is currently in edit mode.
+     */
     public boolean isEditing()
     {
         return editing;
     }
 
+    /*
+    Toggles checking functionality on all of this view's IngredientCards.
+     */
     private void toggleEditing(boolean val)
     {
         for (IngredientCard card: cards)
@@ -245,6 +241,9 @@ public class IngredientView extends EntreeConstraintView
         }
     }
 
+    /*
+    Removes all of the currently checked/selected cards from the IngredientView.
+     */
     private void removeSelectedCards()
     {
         ArrayList<IngredientCard> toRemove = new ArrayList<>();
@@ -253,7 +252,6 @@ public class IngredientView extends EntreeConstraintView
             if (card.isChecked())
             {
                 set.clear(card.getId());
-//                this.removeDetachedView(card, false);
                 card.deleteCard();
                 count--;
                 this.setConstraintSet(set);
@@ -264,6 +262,9 @@ public class IngredientView extends EntreeConstraintView
         requestLayout();
     }
 
+    /*
+    Initializes and positions the guidelines so they can be used to layout components.
+     */
     private void initializeGuidelines()
     {
         topGuideline = Guideline.generateViewId();
@@ -281,18 +282,6 @@ public class IngredientView extends EntreeConstraintView
         set.create(secondRightGuideline, ConstraintSet.VERTICAL_GUIDELINE);
         set.create(leftMiddleGuideline, ConstraintSet.VERTICAL_GUIDELINE);
         set.create(rightMiddleGuideline, ConstraintSet.VERTICAL_GUIDELINE);
-
-//        set.setGuidelineBegin(topGuideline, TOP_MARGIN);
-//        set.setGuidelineBegin(firstLeftGuideline, SIDE_MARGIN);
-//        set.setGuidelinePercent(firstRightGuideline, 0.45f);
-//        set.setGuidelinePercent(secondLeftGuideline, 0.55f);
-//        set.setGuidelineEnd(secondRightGuideline, SIDE_MARGIN);
-
-//        set.setGuidelineBegin(topGuideline, TOP_MARGIN);
-//        set.setGuidelineBegin(firstLeftGuideline, SIDE_MARGIN);
-//        set.setGuidelineBegin(firstRightGuideline, SIDE_MARGIN + CARD_WIDTH);
-//        set.setGuidelineEnd(secondLeftGuideline, SIDE_MARGIN + CARD_WIDTH);
-//        set.setGuidelineEnd(secondRightGuideline, SIDE_MARGIN);
 
         set.setGuidelineBegin(topGuideline, dpToPx(TOP_MARGIN, getContext()));
         set.setGuidelineBegin(firstLeftGuideline, dpToPx(SIDE_MARGIN, getContext()));

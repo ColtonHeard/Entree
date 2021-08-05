@@ -36,6 +36,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.navigation.NavigationView;
 
+/*
+Represents the application's main view elements including the top action bar and bottom navigation bar.
+All other application subviews are placed between them in the remaining screen space.
+ */
 public class MenuBarsView extends EntreeConstraintView implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener
 {
 
@@ -60,22 +64,32 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
     /*
     View objects for the project's custom views. These will be swapped in and out of the subView.
      */
-    private CameraView cameraView;
-    private ScrollView ingredientScroll;
-    private IngredientView ingredientView;
-    private RecipeView recipeView;
+    private final CameraView cameraView;
+    private final ScrollView ingredientScroll;
+    private final IngredientView ingredientView;
+    private final RecipeView recipeView;
 
-    private MenuItem cameraMenuItem, ingredientMenuItem, recipeMenuItem;
+    /*
+    MenuItem objects for each of the application's views. Are placed in the bottom navigation bar.
+     */
+    private final MenuItem cameraMenuItem, ingredientMenuItem, recipeMenuItem;
+
+    /*
+    MaterialButton objects representing action buttons that are swapped in and out of the top action bar based on the active view.
+     */
     MaterialButton addIngredient, editIngredients, ingredientMore;
     MaterialButton cameraMore;
 
     /*
     The Material Design toolbar that represents this view's top action bar.
      */
-    private MaterialToolbar topBar;
-    private BottomNavigationView bottomView;
-    private AppCompatActivity activity;
+    private final MaterialToolbar topBar;
+    private final BottomNavigationView bottomView;
+    private final AppCompatActivity activity;
 
+    /*
+    Creates and lays out the application menu bars and sets the CameraView as the currently open subview.
+     */
     public MenuBarsView(@NonNull Context context, @Nullable AttributeSet attrs, MainActivity mainActivity)
     {
         super(context, attrs);
@@ -137,9 +151,7 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
         bottomView = new BottomNavigationView(context);
         bottomView.setId(BottomNavigationView.generateViewId());
         bottomView.setBackgroundColor(getResources().getColor(R.color.entree_orange));
-        bottomView.setOnNavigationItemSelectedListener(item -> {
-            return onNavigationItemSelected(item);
-        });
+        bottomView.setOnNavigationItemSelectedListener(this::onNavigationItemSelected);
 
         Menu bottomMenu = bottomView.getMenu();
         cameraMenuItem = bottomMenu.add(R.string.camera_icon_name);
@@ -172,11 +184,10 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
 
         onNavigationItemSelected(cameraMenuItem);
 
-//        Menu build = new Menu(context, attrs);
     }
 
     /*
-    Changes the inner subview to the passed View. The passed view must have had a viewId assigned to it.
+    Changes the inner subview to the passed View. The passed view must have a view id assigned to it.
      */
     public void changeView(View v)
     {
@@ -198,6 +209,9 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
         set.applyTo(this);
     }
 
+    /*
+    Initializes and positions the guidelines so they can be used to layout components.
+     */
     private void initializeGuidelines()
     {
         topGuideline = Guideline.generateViewId();
@@ -219,6 +233,9 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
         changeView(v);
     }
 
+    /*
+    Changes the colors of the navigation bars and the phone's status bar to the passed color.
+     */
     private void setColors(@ColorInt int color)
     {
         topBar.setBackgroundColor(color);
@@ -228,7 +245,10 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
         }
     }
 
-
+    /*
+    UI handler method for when a navigation item in the bottom navigation bar is selected.
+    Takes the passed MenuItem and changes the active subview to that MenuItems associated view.
+     */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item)
     {
@@ -267,6 +287,9 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
         return false;
     }
 
+    /*
+    Removes all action buttons from the top action bar.
+     */
     private void removeAllActionButtons()
     {
         topBar.removeView(addIngredient);
@@ -275,7 +298,9 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
         topBar.removeView(editIngredients);
     }
 
-
+    /*
+    UI handler method responsible for processing clicks on the action bar buttons.
+     */
     @Override
     public void onClick(View v)
     {
@@ -287,7 +312,7 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
         }
         else if (v == ingredientMore)
         {
-
+            // INGREDIENT LIST ADDITIONAL OPTIONS
         }
         else if (v == editIngredients)
         {
@@ -303,7 +328,7 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
         }
         else if (v == cameraMore)
         {
-
+            // CAMREA ADDITOINAL OPTIONS
         }
     }
 }

@@ -24,14 +24,26 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+Class for interacting with and processing images through the AI.
+ */
 public class FoodObjectRecognizer
 {
-
+    // Arraylist containing objects detected from the networks input image. This is set on an independent thread and may not always have a value.
     private ArrayList<DetectedObject> foundObjects;
+
+    // ObjectDetector instance responsible for handling the AI model and processing image requests.
     private ObjectDetector detector;
+
+    // Instance to the CameraView, used for passing information between classes. SHOULD BE REMOVED LATER.
     private CameraView view;
+
+    // Instance to the MainActivity so that tasks can be run on the UI thread
     private MainActivity mainActivity;
 
+    /*
+    Constructor that takes the associated CameraView and a reference to the app's MainActivity. Initializes the ObjectDetector.
+     */
     public FoodObjectRecognizer(CameraView v, MainActivity main)
     {
         view = v;
@@ -46,10 +58,11 @@ public class FoodObjectRecognizer
         detector = ObjectDetection.getClient(options);
     }
 
+    /*
+    Processes a given image through the AI model. On success, returns a list of the detected objects. On failure nothing happens and an error message is sent to the log.
+     */
     public void processImage(Bitmap image)
     {
-        //Pass images to the ObjectDetector's process() method
-        //Pass as a Bitmap, NV21 ByteBuffer, or YUV_420_888 medio.Image
         InputImage input = InputImage.fromBitmap(image, 0);
         detector.process(input)
                 .addOnSuccessListener(
@@ -87,6 +100,7 @@ public class FoodObjectRecognizer
                                 });
                             }
                         })
+
                 .addOnFailureListener(
                         new OnFailureListener() {
                             @Override
@@ -97,11 +111,17 @@ public class FoodObjectRecognizer
                         });
     }
 
+    /*
+    Returns the list of detected objects.
+     */
     public List<DetectedObject> getFoundObjects()
     {
         return foundObjects;
     }
 
+    /*
+    Returns a list of strings containing the details of every currently detected object or "No detected food objects!" if none are currently available.
+     */
     public ArrayList<String> getObjectsInfo()
     {
         ArrayList<String> info = new ArrayList<>();

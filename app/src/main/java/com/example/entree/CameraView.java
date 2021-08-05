@@ -1,18 +1,27 @@
 package com.example.entree;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraCaptureSession;
+import android.hardware.camera2.CameraDevice;
+import android.hardware.camera2.CameraManager;
+import android.hardware.camera2.params.OutputConfiguration;
+import android.hardware.camera2.params.SessionConfiguration;
 import android.net.Uri;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,21 +30,23 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.widget.Guideline;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.mlkit.vision.objects.DetectedObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import java.net.URI;
 
 public class CameraView extends EntreeConstraintView implements View.OnLongClickListener
 {
-    MainActivity activity;
-    ImageView pic;
+
     /*
 Constants for the margin at which guideline's should be placed from the edge of the screen.
  */
@@ -56,6 +67,11 @@ Constants for the margin at which guideline's should be placed from the edge of 
     private int middleGuideline;
 
     private FoodObjectRecognizer recognizer;
+    private CameraManager cameraManager;
+    private SurfaceView cameraSurface;
+
+    private MainActivity activity;
+    private ImageView pic;
 
     public CameraView(@NonNull Context context, @Nullable AttributeSet attrs, MainActivity mainActivity)
     {
@@ -63,12 +79,36 @@ Constants for the margin at which guideline's should be placed from the edge of 
 
         this.setOnLongClickListener(this);
 
-        recognizer = new FoodObjectRecognizer(this ,mainActivity);
+        recognizer = new FoodObjectRecognizer(this, mainActivity);
         activity = mainActivity;
         activity.setCameraView(this);
-        pic = new ImageView(context, attrs);
 
+        cameraManager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
+        cameraSurface = new SurfaceView(context, attrs);
+        cameraSurface.setId(SurfaceView.generateViewId());
+
+//        try {
+//            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+//            {
+//                // TODO: Consider calling
+//                //    ActivityCompat#requestPermissions
+//                // here to request the missing permissions, and then overriding
+//                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//                //                                          int[] grantResults)
+//                // to handle the case where the user grants the permission. See the documentation
+//                // for ActivityCompat#requestPermissions for more details.
+//                Log.d("InvalidPermissionsForCamera", "Unable to open camera due to lack of permissions.");
+//            }
+//            cameraManager.openCamera(cameraManager.getCameraIdList()[0], this, null);
+//        }
+//        catch (CameraAccessException e)
+//        {
+//            e.printStackTrace();
+//        }
+
+        pic = new ImageView(context, attrs);
         pic.setId(ImageView.generateViewId());
+        pic.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
         FloatingActionButton fab = getFab(context);
 
@@ -78,17 +118,23 @@ Constants for the margin at which guideline's should be placed from the edge of 
         text.setTypeface(text.getTypeface(), Typeface.BOLD);
         text.setId(TextView.generateViewId());
 
-        this.addView(text);
+//        this.addView(text);
+        this.addView(cameraSurface, new ConstraintLayout.LayoutParams(0, 0));
+        this.addView(pic, new ConstraintLayout.LayoutParams(0, 0));
         this.addView(fab);
-        this.addView(pic);
 
         set.clone(this);
         initializeGuidelines();
 
-        to(text, TOP, topGuideline, TOP);
-        to(text, LEFT, this, LEFT);
-        to(text, BOTTOM, bottomGuideline, TOP);
-        to(text, RIGHT, this, RIGHT);
+//        to(text, TOP, topGuideline, TOP);
+//        to(text, LEFT, this, LEFT);
+//        to(text, BOTTOM, bottomGuideline, TOP);
+//        to(text, RIGHT, this, RIGHT);
+
+        to(cameraSurface, TOP, topGuideline, TOP);
+        to(cameraSurface, LEFT, this, LEFT);
+        to(cameraSurface, BOTTOM, bottomGuideline, TOP);
+        to(cameraSurface, RIGHT, this, RIGHT);
 
         to(fab, TOP, bottomGuideline, TOP);
         to(fab, LEFT, middleGuideline, LEFT);
@@ -106,7 +152,6 @@ Constants for the margin at which guideline's should be placed from the edge of 
         fab.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                text.setText("");
                 activity.openGallery();
                 Log.d("Gallery", "Gallery opened");
             }
@@ -187,4 +232,78 @@ Constants for the margin at which guideline's should be placed from the edge of 
         paintBoundingBoxes(recognizer.getFoundObjects(), ((BitmapDrawable) pic.getDrawable()).getBitmap());
         return true;
     }
+
+    public class CameraCallbackHelper extends CameraDevice.StateCallback
+    {
+        private CameraDevice camera;
+        private CameraView cameraView;
+        private CaptureCallbackHelper helper;
+
+        public CameraCallbackHelper(CameraView view)
+        {
+            super();
+            cameraView = view;
+            helper = new CaptureCallbackHelper();
+        }
+
+        public CameraDevice getCamera()
+        {
+            return camera;
+        }
+
+        @Override
+        public void onOpened(@NonNull CameraDevice camera)
+        {
+            this.camera = camera;
+
+            List<OutputConfiguration> outConfigs = new ArrayList<>();
+            OutputConfiguration outConfig = new OutputConfiguration(cameraSurface.getHolder().getSurface());
+            outConfigs.add(outConfig);
+
+            SessionConfiguration sessionConfig = new SessionConfiguration(SessionConfiguration.SESSION_REGULAR, outConfigs, null, helper);
+
+            try
+            {
+                this.camera.createCaptureSession(sessionConfig);
+            }
+            catch (CameraAccessException e)
+            {
+                e.printStackTrace();
+                Log.d("CameraAccessException-OnOpened", "Error creating the capture session.");
+            }
+        }
+
+        @Override
+        public void onDisconnected(@NonNull CameraDevice camera)
+        {
+
+        }
+
+        @Override
+        public void onError(@NonNull CameraDevice camera, int error)
+        {
+
+        }
+    }
+
+    public class CaptureCallbackHelper extends CameraCaptureSession.StateCallback
+    {
+
+
+        public CaptureCallbackHelper()
+        {
+            super();
+        }
+
+        @Override
+        public void onConfigured(@NonNull CameraCaptureSession session) {
+
+        }
+
+        @Override
+        public void onConfigureFailed(@NonNull CameraCaptureSession session) {
+
+        }
+    }
+
 }

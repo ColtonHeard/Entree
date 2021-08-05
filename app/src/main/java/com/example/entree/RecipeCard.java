@@ -1,8 +1,10 @@
 package com.example.entree;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -20,52 +22,66 @@ import androidx.constraintlayout.widget.Guideline;
 
 import com.google.android.material.card.MaterialCardView;
 
+/*
+Represents a Material Design card responsible for displaying a preview of a recipe.
+ */
 public class RecipeCard extends MaterialCardView implements View.OnClickListener
 {
-    /*
-    Constants for specifying which side of a view to connect a constraint to.
-     */
+    // Constant representing the left side of a view.
     protected final int LEFT = ConstraintSet.LEFT;
+
+    // Constant representing the right side of a view.
     protected final int RIGHT = ConstraintSet.RIGHT;
+
+    // Constant representing the top side of a view.
     protected final int TOP = ConstraintSet.TOP;
+
+    // Constant representing the bottom side of a view.
     protected final int BOTTOM = ConstraintSet.BOTTOM;
 
     private int leftGuideline, topGuideline, rightGuideline, bottomGuideline;
     private int imageRightGuideline, textLeftGuideline, titleBottomGuideline;
 
+    // ConstraintSet object responsible for adding and applying constraints between the subviews in this object.
+    protected ConstraintSet set;
+
+    // The inner ConstraintLayout of this RecipeCard.
     private ConstraintLayout layout;
-    private ConstraintSet set;
 
-    private ImageView image;
-    private TextView title, text;
+    // Reference to this components parent RecipeView.
+    private RecipeView parent;
 
+    // String containing a Uri to the scraped recipe link.
     private String link;
 
-    public RecipeCard(Context context, AttributeSet attrs, String recipeLink, String recipeTitle)
+    /*
+    Initalizes this RecipeCard with the given link and title.
+     */
+    public RecipeCard(Context context, RecipeView parent, AttributeSet attrs, String recipeLink, String recipeTitle)
     {
         super(context, attrs);
         setId(generateViewId());
         this.setCardElevation(6);
         this.setOnClickListener(this);
-//        this.setBackgroundColor(getResources().getColor(R.color.light_gray));
 
         setRadius(10);
 
         set = new ConstraintSet();
         layout = new ConstraintLayout(context, attrs);
         link = recipeLink;
+        this.parent = parent;
 
         this.addView(layout);
 
         //instantiate objects
-        image = new ImageView(layout.getContext(), attrs);
+        ImageView image = new ImageView(layout.getContext(), attrs);
         image.setId(ImageView.generateViewId());
         image.setScaleType(ImageView.ScaleType.FIT_XY);
         image.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.foodimage));
 
         layout.addView(image, new ConstraintLayout.LayoutParams(0, 0));
 
-        title = new TextView(layout.getContext(), attrs);
+        TextView title = new TextView(layout.getContext(), attrs);
         title.setId(TextView.generateViewId());
         title.setText(recipeTitle);
 //        title.setTypeface(title.getTypeface(), Typeface.BOLD);
@@ -84,7 +100,7 @@ public class RecipeCard extends MaterialCardView implements View.OnClickListener
             testDescription += " text";
         }
 
-        text = new TextView(layout.getContext(), attrs);
+        TextView text = new TextView(layout.getContext(), attrs);
         text.setId(TextView.generateViewId());
         text.setText(testDescription);
         text.setTextColor(getResources().getColor(R.color.light_gray));
@@ -119,9 +135,9 @@ public class RecipeCard extends MaterialCardView implements View.OnClickListener
         set.applyTo(layout);
     }
 
-//    private int leftGuideline, topGuideline, rightGuideline, bottomGuideline;
-//    private int imageRightGuideline, titleBottomGuideline;
-
+    /*
+    Initializes and positions the guidelines so they can be used to layout components.
+     */
     private void initializeGuidelines()
     {
         leftGuideline = Guideline.generateViewId();
@@ -166,10 +182,14 @@ public class RecipeCard extends MaterialCardView implements View.OnClickListener
         set.connect(a.getId(), from, guidelineID, to);
     }
 
+    /*
+    UI handler method responsible for responding to clicks on any RecipeCard item, opening the related link on the device's browser.
+     */
     @Override
     public void onClick(View v)
     {
-        //Open link
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+        parent.openBrowserIntent(browserIntent);
     }
 }
 

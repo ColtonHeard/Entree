@@ -1,6 +1,7 @@
 package com.example.entree;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Typeface;
 import android.graphics.fonts.FontStyle;
@@ -31,18 +32,34 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
 
+/*
+Represents a double list view where the top section contains a horizontally scrolling list of IngredientChips and the bottom section contains a vertically scrolling list of RecipeCards.
+ */
 public class RecipeView extends EntreeConstraintView implements View.OnClickListener, View.OnLongClickListener
 {
 
     private int chipTextGuideline, dividerTopGuideline, dividerBottomGuideline, recipeTextGuideline, leftGuideline, rightGuideline, topGuideline, bottomGuideline;
 
-    private LinearLayout topChipContainer, bottomChipContainer, recipeList;
-    private LinearLayout.LayoutParams chipParams, emptyTextParams;
+    // Horizontal LinearLayouts responsible for containing the IngredientChips.
+    private LinearLayout topChipContainer, bottomChipContainer;
+
+    // Vertical Linearlayout responsible for containing the RecipeCards.
+    private LinearLayout recipeList;
+
+    // LayoutParams for specifying how chips and the EmptyText view should be layed out.
+    private LinearLayout.LayoutParams chipParams, emptyTextParams, recipeCardParams;
+
+    // TextView for when no IngredientChips are selected or no results can be found from the web scraper.
     private TextView recipeEmptyText;
+
+    // ArrayList containing all of the IngredientChips in this view.
     private ArrayList<IngredientChip> chips;
+
+    // ArrayList containing all the RecipeCards in this view.
     private ArrayList<RecipeCard> recipes;
-    private MainActivity mainActivity;
-    private LinearLayout.LayoutParams recipeCardParams;
+
+    // Reference to the application's MainActivity
+    private final MainActivity mainActivity;
 
     private static final Executor executor = new Executor() {
         @Override
@@ -52,6 +69,7 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
         }
     };
 
+    // Represents the number of IngredientChips currently added to this view.
     private int count;
 
     public RecipeView(@NonNull Context context, @Nullable AttributeSet attrs, MainActivity main)
@@ -75,16 +93,12 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
         recipeCardParams.gravity = Gravity.CENTER;
         recipeCardParams.setMargins(0, 10, 0, 10);
 
-
-        /*
-        Being initializing view components
-         */
+        // Begin initializing view components
         TextView chipText = new TextView(context, attrs);
         chipText.setId(TextView.generateViewId());
         chipText.setText("Search Ingredients");
         chipText.setTextSize(24);
         chipText.setGravity(Gravity.LEFT);
-//        chipText.setTypeface(chipText.getTypeface(), Typeface.BOLD);
         chipText.setTextColor(getResources().getColor(R.color.black));
         this.addView(chipText, new ConstraintLayout.LayoutParams(0, 0));
 
@@ -178,10 +192,6 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
         this.setConstraintSet(set);
         set.applyTo(this);
 
-//        for (int i = 0; i < 10; i++)
-//        {
-//            addChip();
-//        }
         addChip("Broccoli");
         addChip("Kale");
         addChip("Egg");
@@ -193,6 +203,9 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
         addChip("Lettuce");
     }
 
+    /*
+    Adds an ingredient chip with the given label.
+     */
     public void addChip(String label)
     {
         IngredientChip chip = new IngredientChip(getContext(), null, this);
@@ -219,6 +232,9 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
         count++;
     }
 
+    /*
+    Initializes and positions the guidelines so they can be used to layout components.
+     */
     private void initializeGuidelines()
     {
         chipTextGuideline = Guideline.generateViewId();
@@ -249,6 +265,9 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
         set.setGuidelinePercent(rightGuideline, 0.97f);
     }
 
+    /*
+    Returns a string containing the names of all selected ingredients in the form "one+two+three+...".
+     */
     private String getSelectedIngredients()
     {
         String ingredients = "";
@@ -270,6 +289,9 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
         return ingredients;
     }
 
+    /*
+    Runs the web scraper to search for recipes with the currently selected ingredients. Results are stored in the recipes variable before calling this class's OnLongClick method.
+     */
     private void getWebsite()
     {
         new Thread(new Runnable() {
@@ -302,7 +324,7 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
                             builder.append("------------------").append("\n").append("Link : ").append(link.attr("href"))
                                     .append("\n").append("Title : ").append(link.text()).append("\n");
 
-                            RecipeCard card = new RecipeCard(getContext(), null, link.attr("href"), link.text());
+                            RecipeCard card = new RecipeCard(getContext(), getSelf(),null, link.attr("href"), link.text());
                             foundRecipes.add(card);
 
                         }
@@ -315,6 +337,10 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
                 mainActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        for (int i = 0; i < 14; i++)
+                        {
+                            foundRecipes.remove(foundRecipes.size() - 1);
+                        }
                         recipes = foundRecipes;
                         performLongClick();
                     }
@@ -323,29 +349,54 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
         }).start();
     }
 
-//    private void triggerLongClick()
-//    {
-//        this.performLongClick();
-//    }
+    private RecipeView getSelf()
+    {
+        return this;
+    }
 
+    /*
+    Called by one of the RecipeCard subviews. Opens a browser to the recipe using the MainActivity.
+     */
+    public void openBrowserIntent(Intent intent)
+    {
+        mainActivity.startActivity(intent);
+    }
+
+    /*
+    UI handler method which begins web scraping after an IngredientChip has been selected.
+     */
     @Override
     public void onClick(View v)
     {
         getWebsite();
     }
 
+    /*
+    Called by the web scraper to signal when scraping has finished. Updates the UI with the found recipes.
+     */
     @Override
     public boolean onLongClick(View v)
     {
-        if (recipes != null)
+        int count = 0;
+        for (IngredientChip chip: chips)
+        {
+            if (chip.isChecked()) {
+                count++;
+            }
+        }
+
+        if (count == 0)
+        {
+            recipeList.removeAllViews();
+            recipeList.addView(recipeEmptyText, emptyTextParams);
+        }
+        else if (recipes != null)
         {
             recipeList.removeAllViews();
             for (RecipeCard card: recipes)
             {
                 recipeList.addView(card, recipeCardParams);
             }
-//            recipes = null;
-//            recipeEmptyText.setText("Heck");
         }
         return true;
     }

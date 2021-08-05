@@ -19,14 +19,21 @@ import androidx.constraintlayout.widget.Guideline;
 
 import com.google.android.material.card.MaterialCardView;
 
+/*
+Represents a single Material Design card responsible for displaying the image and basic information about an ingredient.
+ */
 public class IngredientCard extends MaterialCardView implements View.OnClickListener
 {
-    /*
-    Constants for specifying which side of a view to connect a constraint to.
-     */
+    // Constant representing the left side of a view.
     protected final int LEFT = ConstraintSet.LEFT;
+
+    // Constant representing the right side of a view.
     protected final int RIGHT = ConstraintSet.RIGHT;
+
+    // Constant representing the top side of a view.
     protected final int TOP = ConstraintSet.TOP;
+
+    // Constant representing the bottom side of a view.
     protected final int BOTTOM = ConstraintSet.BOTTOM;
 
     private int imageBottomGuideline;
@@ -34,16 +41,20 @@ public class IngredientCard extends MaterialCardView implements View.OnClickList
     private int textBottomGuideline;
     private int leftSideGuideline, rightSideGuideline;
 
+    // ConstraintSet object responsible for adding and applying constraints between the subviews in this object.
+    protected ConstraintSet set;
+
+    // The inner ConstraintLayout of this IngredientCard
     private ConstraintLayout layout;
-    private ConstraintSet set;
 
-    private ImageView image;
-    private TextView title, text;
-
+    /*
+    Creates and lays out a new ingredient card using the default image.
+     */
     public IngredientCard(Context context, AttributeSet attrs)
     {
         super(context, attrs);
-        setId(generateViewId());
+
+        this.setId(generateViewId());
         this.setCardElevation(2);
         this.setCheckedIcon(AppCompatResources.getDrawable(context, R.drawable.close_icon));
 
@@ -58,9 +69,7 @@ public class IngredientCard extends MaterialCardView implements View.OnClickList
 
         this.setCheckedIconTint(list);
         this.setOnClickListener(this);
-
-//        setContentPadding(int left, int top, int right, int bottom)
-        setRadius(10);
+        this.setRadius(10);
 
         set = new ConstraintSet();
         layout = new ConstraintLayout(context, attrs);
@@ -68,16 +77,14 @@ public class IngredientCard extends MaterialCardView implements View.OnClickList
         this.addView(layout);
 
         //instantiate objects
-        image = new ImageView(layout.getContext(), attrs);
+        ImageView image = new ImageView(layout.getContext(), attrs);
         image.setId(ImageView.generateViewId());
         image.setScaleType(ImageView.ScaleType.FIT_XY);
         image.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.food_card_test_image));
 
-        //344, 194 -
-//        layout.addView(image, new ConstraintLayout.LayoutParams(dpToPx(172, context), dpToPx(97, context)));
         layout.addView(image);
 
-        title = new TextView(layout.getContext(), attrs);
+        TextView title = new TextView(layout.getContext(), attrs);
         title.setId(TextView.generateViewId());
         title.setText("Ingredient Name");
         title.setTypeface(title.getTypeface(), Typeface.BOLD);
@@ -93,7 +100,7 @@ public class IngredientCard extends MaterialCardView implements View.OnClickList
             testDescription += " details";
         }
 
-        text = new TextView(layout.getContext(), attrs);
+        TextView text = new TextView(layout.getContext(), attrs);
         text.setId(TextView.generateViewId());
         text.setText(testDescription);
         text.setTextColor(getResources().getColor(R.color.light_gray));
@@ -126,6 +133,9 @@ public class IngredientCard extends MaterialCardView implements View.OnClickList
         set.applyTo(layout);
     }
 
+    /*
+    Initializes and positions the guidelines so they can be used to layout components.
+     */
     private void initializeGuidelines()
     {
         imageBottomGuideline = Guideline.generateViewId();
@@ -147,11 +157,17 @@ public class IngredientCard extends MaterialCardView implements View.OnClickList
         set.setGuidelinePercent(rightSideGuideline, 0.95f);
     }
 
+    /*
+    Changes this MaterialCard to be checkable when clicked by the user.
+     */
     public void enableChecking()
     {
         this.setCheckable(true);
     }
 
+    /*
+    Changes this MaterialCard to be uncheckable and no longer respond to clicks by the user.
+     */
     public void disableChecking()
     {
         this.setChecked(false);
@@ -175,11 +191,17 @@ public class IngredientCard extends MaterialCardView implements View.OnClickList
         set.connect(a.getId(), from, guidelineID, to);
     }
 
+    /*
+    Removes this card from it's parent view.
+     */
     public void deleteCard()
     {
         ((ViewGroup) getParent()).removeView(this);
     }
 
+    /*
+    Handler for the onClick UI event. Will check the card if checking is enabled. Otherwise will open a NutritionView for the ingredient.
+     */
     @Override
     public void onClick(View v)
     {
