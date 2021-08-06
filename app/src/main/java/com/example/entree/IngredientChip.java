@@ -8,16 +8,20 @@ import androidx.appcompat.content.res.AppCompatResources;
 
 import com.google.android.material.chip.Chip;
 
-/*
-Represents a single Material Design chip that is responsible for a single ingredient.
+/**
+ Represents a single Material Design chip that is responsible for a single ingredient.
  */
 public class IngredientChip extends Chip
 {
-    // The randomly generated label for this chip. Should be used as a placeholder and REMOVED later.
+    /** The randomly generated label for this chip. Should be used as a placeholder and REMOVED later. */
     private final String randomLabel;
 
-    /*
-    Initalizes this chip as checkable and adds the passed RecipeView as an OnClickListener. Generates a random label for the chip.
+    /**
+     Initalizes this chip as checkable and adds the passed RecipeView as an OnClickListener. Generates a random label for the chip.
+
+     @param context The application context to create this RecipeCard in.
+     @param attrs The attribute set to initialize this view with.
+     @param recipe The containing RecipeView for this IngredientChip.
      */
     public IngredientChip(Context context, AttributeSet attrs, RecipeView recipe)
     {
@@ -52,8 +56,10 @@ public class IngredientChip extends Chip
         this.setText(text);
     }
 
-    /*
-    Changes the text on this Chip to the passed String. If text is null, defaults back to it's random label.
+    /**
+     Changes the text on this Chip to the passed String. If text is null, defaults back to it's random label.
+
+     @param text The text to change this chip's label to.
      */
     public void setChipText(String text)
     {

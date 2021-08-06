@@ -1,13 +1,8 @@
 package com.example.entree;
 
-import android.content.res.Resources;
-import android.content.res.loader.ResourcesLoader;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
-import android.renderscript.ScriptGroup;
 import android.util.Log;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 
@@ -20,29 +15,31 @@ import com.google.mlkit.vision.objects.ObjectDetector;
 import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions;
 import com.google.mlkit.vision.objects.defaults.PredefinedCategory;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
-Class for interacting with and processing images through the AI.
+/**
+ Class for interacting with and processing images through the AI.
  */
 public class FoodObjectRecognizer
 {
-    // Arraylist containing objects detected from the networks input image. This is set on an independent thread and may not always have a value.
+    /** Arraylist containing objects detected from the networks input image. This is set on an independent thread and may not always have a value. */
     private ArrayList<DetectedObject> foundObjects;
 
-    // ObjectDetector instance responsible for handling the AI model and processing image requests.
+    /** ObjectDetector instance responsible for handling the AI model and processing image requests. */
     private ObjectDetector detector;
 
-    // Instance to the CameraView, used for passing information between classes. SHOULD BE REMOVED LATER.
+    /** Instance to the CameraView, used for passing information between classes. SHOULD BE REPLACED WITH A LISTENER AND REMOVED LATER. */
     private CameraView view;
 
-    // Instance to the MainActivity so that tasks can be run on the UI thread
+    /** Instance to the MainActivity so that tasks can be run on the UI thread */
     private MainActivity mainActivity;
 
-    /*
-    Constructor that takes the associated CameraView and a reference to the app's MainActivity. Initializes the ObjectDetector.
+    /**
+     Constructor that takes the associated CameraView and a reference to the app's MainActivity. Initializes the ObjectDetector.
+
+     @param v The CameraView this FoodObjectRecognizer belongs to.
+     @param main A reference to the application's MainActivity.
      */
     public FoodObjectRecognizer(CameraView v, MainActivity main)
     {
@@ -58,8 +55,10 @@ public class FoodObjectRecognizer
         detector = ObjectDetection.getClient(options);
     }
 
-    /*
-    Processes a given image through the AI model. On success, returns a list of the detected objects. On failure nothing happens and an error message is sent to the log.
+    /**
+     Processes a given image through the AI model. On success, returns a list of the detected objects. On failure nothing happens and an error message is sent to the log.
+
+     @param image A Bitmap of the input image's pixel information.
      */
     public void processImage(Bitmap image)
     {
@@ -111,16 +110,20 @@ public class FoodObjectRecognizer
                         });
     }
 
-    /*
-    Returns the list of detected objects.
+    /**
+     Returns the list of detected objects.
+
+     @return An ArrayList containing all of the DetectedObjects from the AI.
      */
     public List<DetectedObject> getFoundObjects()
     {
         return foundObjects;
     }
 
-    /*
-    Returns a list of strings containing the details of every currently detected object or "No detected food objects!" if none are currently available.
+    /**
+     Returns a list of strings containing the details of every currently detected object or "No detected food objects!" if none are currently available.
+
+     @return An ArrayList containing strings with information about each DetectedObject, including the confidence and location of it's bounding box.
      */
     public ArrayList<String> getObjectsInfo()
     {

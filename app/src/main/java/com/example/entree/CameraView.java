@@ -44,12 +44,15 @@ import java.util.List;
 
 import java.net.URI;
 
+/**
+ * View for interacting with the Camera and feeding images to the AI.
+ */
 public class CameraView extends EntreeConstraintView implements View.OnLongClickListener
 {
 
     /*
-Constants for the margin at which guideline's should be placed from the edge of the screen.
- */
+    Constants for the margin at which guideline's should be placed from the edge of the screen.
+    */
     private final int BOTTOM_GUIDELINE_MARGIN = 56;
     private final int TOP_GUIDELINE_MARGIN = 56;
     private final int BOTTOMBUTTON_GUIDELINE_MARGIN = 25;

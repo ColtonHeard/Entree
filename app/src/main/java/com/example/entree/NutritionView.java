@@ -16,8 +16,8 @@ import androidx.constraintlayout.widget.Guideline;
 
 import org.w3c.dom.Text;
 
-/*
-WIP class for displaying an ingredient's nutritional information.
+/**
+ WIP class for displaying an ingredient's nutritional information.
  */
 public class NutritionView extends ConstraintLayout
 {

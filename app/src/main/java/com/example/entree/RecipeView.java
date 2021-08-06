@@ -32,18 +32,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
 
-/*
-Represents a double list view where the top section contains a horizontally scrolling list of IngredientChips and the bottom section contains a vertically scrolling list of RecipeCards.
+/**
+ Represents a double list view where the top section contains a horizontally scrolling list of IngredientChips and the bottom section contains a vertically scrolling list of RecipeCards.
  */
 public class RecipeView extends EntreeConstraintView implements View.OnClickListener, View.OnLongClickListener
 {
 
     private int chipTextGuideline, dividerTopGuideline, dividerBottomGuideline, recipeTextGuideline, leftGuideline, rightGuideline, topGuideline, bottomGuideline;
 
-    // Horizontal LinearLayouts responsible for containing the IngredientChips.
+    /** Horizontal LinearLayouts responsible for containing the IngredientChips. */
     private LinearLayout topChipContainer, bottomChipContainer;
 
-    // Vertical Linearlayout responsible for containing the RecipeCards.
+    /** Vertical Linearlayout responsible for containing the RecipeCards. */
     private LinearLayout recipeList;
 
     // LayoutParams for specifying how chips and the EmptyText view should be layed out.
@@ -203,8 +203,12 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
         addChip("Lettuce");
     }
 
-    /*
-    Adds an ingredient chip with the given label.
+    /**
+     Adds an ingredient chip with the given label. The first two ingredients are added to the top LinearLayout, the second two to the bottom.
+     All subsequent chips are added as follows: if there are an even number of chips currently, it is added to the bottom, otherwise it is added to the top LinearLayout.
+     This results in a bottom heavy look to the chips.
+
+     @param label The label to set the IngredientChip's text to.
      */
     public void addChip(String label)
     {
@@ -232,7 +236,7 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
         count++;
     }
 
-    /*
+    /**
     Initializes and positions the guidelines so they can be used to layout components.
      */
     private void initializeGuidelines()
@@ -265,8 +269,9 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
         set.setGuidelinePercent(rightGuideline, 0.97f);
     }
 
-    /*
-    Returns a string containing the names of all selected ingredients in the form "one+two+three+...".
+    /**
+     Returns a string containing the names of all selected ingredients in the form "one+two+three+...".
+     Intended for use with the web scraper.
      */
     private String getSelectedIngredients()
     {
@@ -289,7 +294,7 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
         return ingredients;
     }
 
-    /*
+    /**
     Runs the web scraper to search for recipes with the currently selected ingredients. Results are stored in the recipes variable before calling this class's OnLongClick method.
      */
     private void getWebsite()
@@ -354,16 +359,20 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
         return this;
     }
 
-    /*
-    Called by one of the RecipeCard subviews. Opens a browser to the recipe using the MainActivity.
+    /**
+     Called by one of the RecipeCard subviews. Opens a browser to the recipe using the application's MainActivity.
+
+     @param intent Should be a ACTION_VIEW intent with a Uri attatched.
      */
     public void openBrowserIntent(Intent intent)
     {
         mainActivity.startActivity(intent);
     }
 
-    /*
-    UI handler method which begins web scraping after an IngredientChip has been selected.
+    /**
+     UI handler method which calls the web scraper after an IngredientChip has been selected.
+
+     @param v The view that received the click.
      */
     @Override
     public void onClick(View v)
@@ -371,8 +380,10 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
         getWebsite();
     }
 
-    /*
-    Called by the web scraper to signal when scraping has finished. Updates the UI with the found recipes.
+    /**
+     Called by the web scraper to signal when scraping has finished. Updates the UI with the found recipes.
+
+     @param v The view that received the long click.
      */
     @Override
     public boolean onLongClick(View v)

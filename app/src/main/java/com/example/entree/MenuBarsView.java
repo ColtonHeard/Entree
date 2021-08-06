@@ -43,10 +43,10 @@ All other application subviews are placed between them in the remaining screen s
 public class MenuBarsView extends EntreeConstraintView implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener
 {
 
-    /*
-    Constants for the margin at which guideline's should be placed from the edge of the screen.
-     */
+    /** Constants for the margin at which the bottom guideline should be placed from the bottom of the screen. */
     private final int BOTTOM_GUIDELINE_MARGIN = 56;
+
+    /** Constants for the margin at which the top guideline should be placed from the top of the screen. */
     private final int TOP_GUIDELINE_MARGIN = 56;
 
     /*
@@ -56,13 +56,11 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
     private int topGuideline;
     private int bottomGuideline;
 
-    /*
-    View object that represents the current subView.
-     */
+    /** View object that represents the current subView. */
     private View subView;
 
     /*
-    View objects for the project's custom views. These will be swapped in and out of the subView.
+     View objects for the project's custom views. These will be swapped in and out of the subView.
      */
     private final CameraView cameraView;
     private final ScrollView ingredientScroll;
@@ -70,12 +68,12 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
     private final RecipeView recipeView;
 
     /*
-    MenuItem objects for each of the application's views. Are placed in the bottom navigation bar.
+     MenuItem objects for each of the application's views. Are placed in the bottom navigation bar.
      */
     private final MenuItem cameraMenuItem, ingredientMenuItem, recipeMenuItem;
 
     /*
-    MaterialButton objects representing action buttons that are swapped in and out of the top action bar based on the active view.
+     MaterialButton objects representing action buttons that are swapped in and out of the top action bar based on the active view.
      */
     MaterialButton addIngredient, editIngredients, ingredientMore;
     MaterialButton cameraMore;
@@ -87,8 +85,12 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
     private final BottomNavigationView bottomView;
     private final AppCompatActivity activity;
 
-    /*
-    Creates and lays out the application menu bars and sets the CameraView as the currently open subview.
+    /**
+     Creates and lays out the application menu bars and sets the CameraView as the currently open subview.
+
+     @param context The application context to create this RecipeCard in.
+     @param attrs The attribute set to initialize this view with.
+     @param mainActivity The application's MainActivity.
      */
     public MenuBarsView(@NonNull Context context, @Nullable AttributeSet attrs, MainActivity mainActivity)
     {
@@ -186,8 +188,10 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
 
     }
 
-    /*
-    Changes the inner subview to the passed View. The passed view must have a view id assigned to it.
+    /**
+     Changes the inner subview to the passed View. The passed view must have a view id assigned to it.
+
+     @param v The view to change the subview to.
      */
     public void changeView(View v)
     {
@@ -209,8 +213,8 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
         set.applyTo(this);
     }
 
-    /*
-    Initializes and positions the guidelines so they can be used to layout components.
+    /**
+     Initializes and positions the guidelines so they can be used to layout components.
      */
     private void initializeGuidelines()
     {
@@ -224,8 +228,10 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
         set.setGuidelineEnd(bottomGuideline, dpToPx(BOTTOM_GUIDELINE_MARGIN, getContext()));
     }
 
-    /*
-    Method that handles changing the subview. Performs any cleanup work needed such as ensuring colors are correct for the view.
+    /**
+     Method that handles changing the subview. Performs any cleanup work needed such as ensuring colors are correct for the view.
+
+     @param v The view to switch the subview to.
      */
     private void switchView(View v)
     {
@@ -233,8 +239,10 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
         changeView(v);
     }
 
-    /*
-    Changes the colors of the navigation bars and the phone's status bar to the passed color.
+    /**
+     Changes the colors of the navigation bars and the phone's status bar to the passed color.
+
+     @param color A @ColorInt representing the color to change to.
      */
     private void setColors(@ColorInt int color)
     {
@@ -245,9 +253,12 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
         }
     }
 
-    /*
-    UI handler method for when a navigation item in the bottom navigation bar is selected.
-    Takes the passed MenuItem and changes the active subview to that MenuItems associated view.
+    /**
+     UI handler method for when a navigation item in the bottom navigation bar is selected.
+     Takes the passed MenuItem and changes the active subview to that MenuItems associated view.
+
+     @param item The MenuItem that was tapped by the user.
+     @returns A boolean showing whether or not a recognized MenuItem was clicked.
      */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item)
@@ -287,8 +298,8 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
         return false;
     }
 
-    /*
-    Removes all action buttons from the top action bar.
+    /**
+     Removes all action buttons from the top action bar.
      */
     private void removeAllActionButtons()
     {
@@ -298,8 +309,10 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
         topBar.removeView(editIngredients);
     }
 
-    /*
-    UI handler method responsible for processing clicks on the action bar buttons.
+    /**
+     UI handler method responsible for processing clicks on the action bar buttons.
+
+     @param v The view that was clicked.
      */
     @Override
     public void onClick(View v)

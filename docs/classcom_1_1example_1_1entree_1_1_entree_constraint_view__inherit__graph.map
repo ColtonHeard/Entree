@@ -1,0 +1,8 @@
+<map id="com.example.entree.EntreeConstraintView" name="com.example.entree.EntreeConstraintView">
+<area shape="rect" id="node1" title=" " alt="" coords="173,74,356,115"/>
+<area shape="rect" id="node3" href="$classcom_1_1example_1_1entree_1_1_camera_view.html" title=" " alt="" coords="411,5,628,32"/>
+<area shape="rect" id="node4" href="$classcom_1_1example_1_1entree_1_1_ingredient_view.html" title=" " alt="" coords="405,56,633,83"/>
+<area shape="rect" id="node5" href="$classcom_1_1example_1_1entree_1_1_menu_bars_view.html" title=" " alt="" coords="404,107,635,133"/>
+<area shape="rect" id="node6" href="$classcom_1_1example_1_1entree_1_1_recipe_view.html" title=" " alt="" coords="413,157,625,184"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,81,125,108"/>
+</map>

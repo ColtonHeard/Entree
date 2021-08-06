@@ -19,36 +19,39 @@ import androidx.constraintlayout.widget.Guideline;
 
 import com.google.android.material.card.MaterialCardView;
 
-/*
-Represents a single Material Design card responsible for displaying the image and basic information about an ingredient.
+/**
+ Represents a single Material Design card responsible for displaying the image and basic information about an ingredient.
  */
 public class IngredientCard extends MaterialCardView implements View.OnClickListener
 {
-    // Constant representing the left side of a view.
+    /** Constant representing the left side of a view. */
     protected final int LEFT = ConstraintSet.LEFT;
 
-    // Constant representing the right side of a view.
+    /** Constant representing the right side of a view. */
     protected final int RIGHT = ConstraintSet.RIGHT;
 
-    // Constant representing the top side of a view.
+    /** Constant representing the top side of a view. */
     protected final int TOP = ConstraintSet.TOP;
 
-    // Constant representing the bottom side of a view.
+    /** Constant representing the bottom side of a view. */
     protected final int BOTTOM = ConstraintSet.BOTTOM;
+
+    /** ConstraintSet object responsible for adding and applying constraints between the subviews in this object. */
+    protected ConstraintSet set;
 
     private int imageBottomGuideline;
     private int titleBottomGuideline;
     private int textBottomGuideline;
     private int leftSideGuideline, rightSideGuideline;
 
-    // ConstraintSet object responsible for adding and applying constraints between the subviews in this object.
-    protected ConstraintSet set;
+    /** The inner ConstraintLayout of this IngredientCard */
+    private final ConstraintLayout layout;
 
-    // The inner ConstraintLayout of this IngredientCard
-    private ConstraintLayout layout;
+    /**
+     Creates and lays out a new IngredientCard using the default image.
 
-    /*
-    Creates and lays out a new ingredient card using the default image.
+     @param context The application context to create this RecipeCard in.
+     @param attrs The attribute set to initialize this view with.
      */
     public IngredientCard(Context context, AttributeSet attrs)
     {
@@ -133,8 +136,8 @@ public class IngredientCard extends MaterialCardView implements View.OnClickList
         set.applyTo(layout);
     }
 
-    /*
-    Initializes and positions the guidelines so they can be used to layout components.
+    /**
+     Initializes and positions the guidelines so they can be used to layout components.
      */
     private void initializeGuidelines()
     {
@@ -157,16 +160,16 @@ public class IngredientCard extends MaterialCardView implements View.OnClickList
         set.setGuidelinePercent(rightSideGuideline, 0.95f);
     }
 
-    /*
-    Changes this MaterialCard to be checkable when clicked by the user.
+    /**
+     Changes this MaterialCard to be checkable when clicked by the user.
      */
     public void enableChecking()
     {
         this.setCheckable(true);
     }
 
-    /*
-    Changes this MaterialCard to be uncheckable and no longer respond to clicks by the user.
+    /**
+     Changes this MaterialCard to be uncheckable and no longer respond to clicks by the user.
      */
     public void disableChecking()
     {
@@ -174,33 +177,46 @@ public class IngredientCard extends MaterialCardView implements View.OnClickList
         this.setCheckable(false);
     }
 
-    /*
-    Helper method that makes a constraint connection from view a to view b.
-    Connection starts on a's from side and connects to b's to side.
+    /**
+     Helper method that makes a constraint connection from view a to view b.
+     Connection starts on a's from side and connects to b's to side.
+
+     @param a The view to start a connection from.
+     @param from The side of a to start the constraint connection.
+     @param b The view to connect to.
+     @param to The side of the view to connect to.
      */
     protected void to(View a, int from, View b, int to)
     {
         set.connect(a.getId(), from, b.getId(), to);
     }
 
-    /*
-    Overloaded version allowing for a constraint connection to be made to a guideline instead of a view object.
+    /**
+     Overloaded version allowing for a constraint connection to be made to a guideline instead of a view object.
+
+     @param a The view to start a connection from.
+     @param from The side of a to start the constraint connection.
+     @param guidelineID The id of the guideline to connect to.
+     @param to The side of the guideline to connect to.
+     @see #to(View, int, View, int)
      */
     protected void to(View a, int from, int guidelineID, int to)
     {
         set.connect(a.getId(), from, guidelineID, to);
     }
 
-    /*
-    Removes this card from it's parent view.
+    /**
+     Removes this card from it's parent view.
      */
     public void deleteCard()
     {
         ((ViewGroup) getParent()).removeView(this);
     }
 
-    /*
-    Handler for the onClick UI event. Will check the card if checking is enabled. Otherwise will open a NutritionView for the ingredient.
+    /**
+     Handler for the onClick UI event. Will check the card if checking is enabled. Otherwise will open a NutritionView for the ingredient.
+
+     @param v The view that was clicked.
      */
     @Override
     public void onClick(View v)

@@ -21,9 +21,9 @@ import com.google.android.material.card.MaterialCardView;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-/*
-Represents a list-type view containing all of the detected or user-input ingredients in Material Design cards.
-Has functionality for editing and adjusting the contained list.
+/**
+ Represents a list-type view containing all of the detected or user-input ingredients in Material Design cards.
+ Has functionality for editing and adjusting the contained list.
  */
 public class IngredientView extends EntreeConstraintView
 {
@@ -40,17 +40,20 @@ public class IngredientView extends EntreeConstraintView
     private int secondLeftGuideline, secondRightGuideline;
     private int leftMiddleGuideline, rightMiddleGuideline;
 
-    // ArrayList of all IngredientCards currently added to this view.
+    /** ArrayList of all IngredientCards currently added to this view. */
     private ArrayList<IngredientCard> cards;
 
-    // THe number of IngredientCards currently contained in this view.
+    /** THe number of IngredientCards currently contained in this view. */
     private int count;
 
-    // Boolean depicting whether or not the view is in edit mode.
+    /** Boolean depicting whether or not the view is in edit mode. */
     private boolean editing;
 
-    /*
-    Initializes the view and adds 5 dummy cards.
+    /**
+     Initializes the view and adds 5 dummy cards.
+
+     @param context The application context to create this RecipeCard in.
+     @param attrs The attribute set to initialize this view with.
      */
     public IngredientView(@NonNull Context context, @Nullable AttributeSet attrs)
     {
@@ -74,8 +77,8 @@ public class IngredientView extends EntreeConstraintView
         }
     }
 
-    /*
-    Adds a new IngredientCard to this view and lays it out accordingly.
+    /**
+     Adds a new IngredientCard with a random description to this view and lays it out accordingly.
      */
     public void addCard()
     {
@@ -131,8 +134,10 @@ public class IngredientView extends EntreeConstraintView
         set.applyTo(this);
     }
 
-    /*
-    Adds the passed IngredientCard to this view and lays it out accordingly.
+    /**
+     Adds the passed IngredientCard to this view and lays it out accordingly.
+
+     @param card The IngredientCard to add to this view.
      */
     private void addCard(IngredientCard card)
     {
@@ -186,8 +191,8 @@ public class IngredientView extends EntreeConstraintView
         set.applyTo(this);
     }
 
-    /*
-    Rebinds the constraints of all cards. Called after cards are removed via edit mode.
+    /**
+     Rebinds the constraints of all cards. Called after cards are removed via edit mode.
      */
     private void relayoutCards()
     {
@@ -200,8 +205,8 @@ public class IngredientView extends EntreeConstraintView
         }
     }
 
-    /*
-    Toggles edit mode, either enabling it and checking functionality on all contained IngredientCards or removing any checked IngredientCards.
+    /**
+     Toggles edit mode, either enabling it and checking functionality on all contained IngredientCards or removing any checked IngredientCards.
      */
     public void enableEditing()
     {
@@ -215,16 +220,20 @@ public class IngredientView extends EntreeConstraintView
         toggleEditing(editing);
     }
 
-    /*
-    Returns a boolean depicting whether or not the view is currently in edit mode.
+    /**
+     Returns a boolean depicting whether or not the view is currently in edit mode.
+
+     @return Boolean showing if the view is currently in edit mode.
      */
     public boolean isEditing()
     {
         return editing;
     }
 
-    /*
-    Toggles checking functionality on all of this view's IngredientCards.
+    /**
+     Changes checking functionality on all of this view's IngredientCards.
+
+     @param val Whether or not checking functionality is enabled.
      */
     private void toggleEditing(boolean val)
     {
@@ -241,8 +250,8 @@ public class IngredientView extends EntreeConstraintView
         }
     }
 
-    /*
-    Removes all of the currently checked/selected cards from the IngredientView.
+    /**
+     Removes all of the currently checked/selected cards from the IngredientView.
      */
     private void removeSelectedCards()
     {
@@ -262,8 +271,8 @@ public class IngredientView extends EntreeConstraintView
         requestLayout();
     }
 
-    /*
-    Initializes and positions the guidelines so they can be used to layout components.
+    /**
+     Initializes and positions the guidelines so they can be used to layout components.
      */
     private void initializeGuidelines()
     {
