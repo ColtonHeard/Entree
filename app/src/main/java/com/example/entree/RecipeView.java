@@ -46,19 +46,19 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
     /** Vertical Linearlayout responsible for containing the RecipeCards. */
     private LinearLayout recipeList;
 
-    // LayoutParams for specifying how chips and the EmptyText view should be layed out.
+    /** LayoutParams for specifying how chips and the EmptyText view should be layed out. */
     private LinearLayout.LayoutParams chipParams, emptyTextParams, recipeCardParams;
 
-    // TextView for when no IngredientChips are selected or no results can be found from the web scraper.
+    /** TextView for when no IngredientChips are selected or no results can be found from the web scraper. */
     private TextView recipeEmptyText;
 
-    // ArrayList containing all of the IngredientChips in this view.
+    /** ArrayList containing all of the IngredientChips in this view. */
     private ArrayList<IngredientChip> chips;
 
-    // ArrayList containing all the RecipeCards in this view.
+    /** ArrayList containing all the RecipeCards in this view. */
     private ArrayList<RecipeCard> recipes;
 
-    // Reference to the application's MainActivity
+    /** Reference to the application's MainActivity */
     private final MainActivity mainActivity;
 
     private static final Executor executor = new Executor() {
@@ -69,9 +69,16 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
         }
     };
 
-    // Represents the number of IngredientChips currently added to this view.
+    /** Represents the number of IngredientChips currently added to this view. */
     private int count;
 
+    /**
+     * Creates a new RecipeView with the appropriate layout.
+     *
+     * @param context The application context to initialize this view in.
+     * @param attrs The attribute set to apply to this view.
+     * @param main A reference to the application's MainActivity.
+     */
     public RecipeView(@NonNull Context context, @Nullable AttributeSet attrs, MainActivity main)
     {
         super(context, attrs);
