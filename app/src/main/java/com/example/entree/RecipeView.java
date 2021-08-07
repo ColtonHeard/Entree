@@ -2,9 +2,6 @@ package com.example.entree;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Canvas;
-import android.graphics.Typeface;
-import android.graphics.fonts.FontStyle;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -16,12 +13,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.widget.Guideline;
-
-import com.google.android.material.chip.Chip;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -35,7 +29,7 @@ import java.util.concurrent.Executor;
 /**
  Represents a double list view where the top section contains a horizontally scrolling list of IngredientChips and the bottom section contains a vertically scrolling list of RecipeCards.
  */
-public class RecipeView extends EntreeConstraintView implements View.OnClickListener, View.OnLongClickListener
+public class RecipeView extends EntreeConstraintView implements View.OnClickListener, View.OnLongClickListener, RecipeSearcher.RecipeSearcherListener
 {
 
     private int chipTextGuideline, dividerTopGuideline, dividerBottomGuideline, recipeTextGuideline, leftGuideline, rightGuideline, topGuideline, bottomGuideline;
@@ -417,5 +411,11 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
             }
         }
         return true;
+    }
+
+    @Override
+    public void onRecipesReady(ArrayList<Recipe> recipes)
+    {
+
     }
 }

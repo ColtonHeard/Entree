@@ -83,12 +83,16 @@ public class CameraView extends EntreeConstraintView implements View.OnLongClick
         this.setOnLongClickListener(this);
 
         recognizer = new FoodObjectRecognizer(this, mainActivity);
-        activity = mainActivity;
-        activity.setCameraView(this);
 
-        cameraManager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
-        cameraSurface = new SurfaceView(context, attrs);
-        cameraSurface.setId(SurfaceView.generateViewId());
+
+        activity = mainActivity;
+        if (activity != null) {
+            activity.setCameraView(this);
+
+            cameraManager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
+            cameraSurface = new SurfaceView(context, attrs);
+            cameraSurface.setId(SurfaceView.generateViewId());
+        }
 
 //        try {
 //            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
@@ -122,9 +126,11 @@ public class CameraView extends EntreeConstraintView implements View.OnLongClick
         text.setId(TextView.generateViewId());
 
 //        this.addView(text);
-        this.addView(cameraSurface, new ConstraintLayout.LayoutParams(0, 0));
-        this.addView(pic, new ConstraintLayout.LayoutParams(0, 0));
-        this.addView(fab);
+        if (activity != null) {
+            this.addView(cameraSurface, new ConstraintLayout.LayoutParams(0, 0));
+            this.addView(pic, new ConstraintLayout.LayoutParams(0, 0));
+            this.addView(fab);
+        }
 
         set.clone(this);
         initializeGuidelines();
@@ -134,10 +140,12 @@ public class CameraView extends EntreeConstraintView implements View.OnLongClick
 //        to(text, BOTTOM, bottomGuideline, TOP);
 //        to(text, RIGHT, this, RIGHT);
 
-        to(cameraSurface, TOP, topGuideline, TOP);
-        to(cameraSurface, LEFT, this, LEFT);
-        to(cameraSurface, BOTTOM, bottomGuideline, TOP);
-        to(cameraSurface, RIGHT, this, RIGHT);
+        if (activity != null) {
+            to(cameraSurface, TOP, topGuideline, TOP);
+            to(cameraSurface, LEFT, this, LEFT);
+            to(cameraSurface, BOTTOM, bottomGuideline, TOP);
+            to(cameraSurface, RIGHT, this, RIGHT);
+        }
 
         to(fab, TOP, bottomGuideline, TOP);
         to(fab, LEFT, middleGuideline, LEFT);

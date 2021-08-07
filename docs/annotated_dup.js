@@ -13,7 +13,9 @@ var annotated_dup =
           [ "MainActivity", "classcom_1_1example_1_1entree_1_1_main_activity.html", "classcom_1_1example_1_1entree_1_1_main_activity" ],
           [ "MenuBarsView", "classcom_1_1example_1_1entree_1_1_menu_bars_view.html", "classcom_1_1example_1_1entree_1_1_menu_bars_view" ],
           [ "NutritionView", "classcom_1_1example_1_1entree_1_1_nutrition_view.html", "classcom_1_1example_1_1entree_1_1_nutrition_view" ],
+          [ "Recipe", "classcom_1_1example_1_1entree_1_1_recipe.html", "classcom_1_1example_1_1entree_1_1_recipe" ],
           [ "RecipeCard", "classcom_1_1example_1_1entree_1_1_recipe_card.html", "classcom_1_1example_1_1entree_1_1_recipe_card" ],
+          [ "RecipeSearcher", "classcom_1_1example_1_1entree_1_1_recipe_searcher.html", "classcom_1_1example_1_1entree_1_1_recipe_searcher" ],
           [ "RecipeView", "classcom_1_1example_1_1entree_1_1_recipe_view.html", "classcom_1_1example_1_1entree_1_1_recipe_view" ]
         ] ]
       ] ]

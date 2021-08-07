@@ -15,6 +15,11 @@ var hierarchy =
     [ "NavigationView.OnNavigationItemSelectedListener", null, [
       [ "com.example.entree.MenuBarsView", "classcom_1_1example_1_1entree_1_1_menu_bars_view.html", null ]
     ] ],
+    [ "com.example.entree.Recipe", "classcom_1_1example_1_1entree_1_1_recipe.html", null ],
+    [ "com.example.entree.RecipeSearcher", "classcom_1_1example_1_1entree_1_1_recipe_searcher.html", null ],
+    [ "com.example.entree.RecipeSearcher.RecipeSearcherListener", "interfacecom_1_1example_1_1entree_1_1_recipe_searcher_1_1_recipe_searcher_listener.html", [
+      [ "com.example.entree.RecipeView", "classcom_1_1example_1_1entree_1_1_recipe_view.html", null ]
+    ] ],
     [ "CameraCaptureSession.StateCallback", null, [
       [ "com.example.entree.CameraView.CaptureCallbackHelper", "classcom_1_1example_1_1entree_1_1_camera_view_1_1_capture_callback_helper.html", null ]
     ] ],

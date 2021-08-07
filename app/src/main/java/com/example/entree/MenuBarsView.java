@@ -68,8 +68,8 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
     private final RecipeView recipeView;
 
     /*
-     MenuItem objects for each of the application's views. Are placed in the bottom navigation bar.
-     */
+         MenuItem objects for each of the application's views. Are placed in the bottom navigation bar.
+         */
     private final MenuItem cameraMenuItem, ingredientMenuItem, recipeMenuItem;
 
     /*
@@ -79,8 +79,8 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
     MaterialButton cameraMore;
 
     /*
-    The Material Design toolbar that represents this view's top action bar.
-     */
+        The Material Design toolbar that represents this view's top action bar.
+         */
     private final MaterialToolbar topBar;
     private final BottomNavigationView bottomView;
     private final AppCompatActivity activity;
@@ -248,7 +248,7 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
     {
         topBar.setBackgroundColor(color);
         bottomView.setBackgroundColor(color);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (activity != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             activity.getWindow().setStatusBarColor(color);
         }
     }
@@ -343,5 +343,41 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
         {
             // CAMREA ADDITOINAL OPTIONS
         }
+    }
+
+    public View getSubView() {
+        return subView;
+    }
+
+    public MaterialToolbar getTopBar() {
+        return topBar;
+    }
+
+    public BottomNavigationView getBottomView() {
+        return bottomView;
+    }
+
+    public CameraView getCameraView() {
+        return cameraView;
+    }
+
+    public IngredientView getIngredientView() {
+        return ingredientView;
+    }
+
+    public RecipeView getRecipeView() {
+        return recipeView;
+    }
+
+    public MenuItem getCameraMenuItem() {
+        return cameraMenuItem;
+    }
+
+    public MenuItem getIngredientMenuItem() {
+        return ingredientMenuItem;
+    }
+
+    public MenuItem getRecipeMenuItem() {
+        return recipeMenuItem;
     }
 }

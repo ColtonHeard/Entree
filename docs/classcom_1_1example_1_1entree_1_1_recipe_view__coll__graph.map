@@ -1,9 +1,10 @@
 <map id="com.example.entree.RecipeView" name="com.example.entree.RecipeView">
-<area shape="rect" id="node1" title=" " alt="" coords="552,112,764,139"/>
-<area shape="rect" id="node2" href="$classcom_1_1example_1_1entree_1_1_entree_constraint_view.html" title=" " alt="" coords="196,23,379,65"/>
+<area shape="rect" id="node1" title=" " alt="" coords="585,140,797,167"/>
+<area shape="rect" id="node2" href="$classcom_1_1example_1_1entree_1_1_entree_constraint_view.html" title=" " alt="" coords="213,23,395,65"/>
 <area shape="rect" id="node3" title=" " alt="" coords="5,5,125,32"/>
 <area shape="rect" id="node4" title=" " alt="" coords="15,56,116,83"/>
-<area shape="rect" id="node5" title=" " alt="" coords="214,89,361,116"/>
-<area shape="rect" id="node6" title=" " alt="" coords="200,140,375,167"/>
-<area shape="rect" id="node7" title=" " alt="" coords="239,197,335,224"/>
+<area shape="rect" id="node5" title=" " alt="" coords="231,89,377,116"/>
+<area shape="rect" id="node6" title=" " alt="" coords="217,140,391,167"/>
+<area shape="rect" id="node7" href="$interfacecom_1_1example_1_1entree_1_1_recipe_searcher_1_1_recipe_searcher_listener.html" title=" " alt="" coords="196,191,412,233"/>
+<area shape="rect" id="node8" title=" " alt="" coords="256,260,352,287"/>
 </map>
