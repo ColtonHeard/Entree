@@ -1,25 +1,16 @@
 package com.example.entree;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.widget.Guideline;
 
-import com.google.android.material.card.MaterialCardView;
-
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 /**
  Represents a list-type view containing all of the detected or user-input ingredients in Material Design cards.

@@ -1,20 +1,15 @@
 package com.example.entree;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.widget.Guideline;
-
-import org.w3c.dom.Text;
 
 /**
  WIP class for displaying an ingredient's nutritional information.
@@ -47,9 +42,9 @@ public class NutritionView extends ConstraintLayout
     /*
     Creates a new NutritionView object and creates the basic layout.
      */
-    public NutritionView(Context context, AttributeSet atts)
+    public NutritionView(Context context, AttributeSet attrs)
     {
-        super(context, atts);
+        super(context, attrs);
 
         set = new ConstraintSet();
         set.clone(this);
@@ -147,20 +142,6 @@ public class NutritionView extends ConstraintLayout
         view.setTextAlignment(TextView.TEXT_ALIGNMENT_CENTER);
         view.setText(text);
         view.setTextSize(textSize);
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas)
-    {
-        super.onDraw(canvas);
-
-        //Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
-    {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
 //    Boolean dataHasNotBeenRead = true;
