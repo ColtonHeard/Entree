@@ -23,7 +23,7 @@ import androidx.constraintlayout.widget.Guideline;
 import com.google.android.material.card.MaterialCardView;
 
 /*
-Represents a Material Design card responsible for displaying a preview of a recipe.
+Represents a Material Design card responsible for displaying a preview of a com.example.entree.recipe.
  */
 public class RecipeCard extends MaterialCardView implements View.OnClickListener
 {
@@ -51,7 +51,7 @@ public class RecipeCard extends MaterialCardView implements View.OnClickListener
     /** Reference to this components parent RecipeView. */
     private RecipeView parent;
 
-    /** String containing a Uri to the scraped recipe link. */
+    /** String containing a Uri to the scraped com.example.entree.recipe link. */
     private String link;
 
     /**
@@ -60,8 +60,8 @@ public class RecipeCard extends MaterialCardView implements View.OnClickListener
      @param context The application context to create this RecipeCard in.
      @param parent The containing parent RecipeView this view belongs to.
      @param attrs The attribute set to initialize this view with.
-     @param recipeLink The uri for this recipe.
-     @param recipeTitle The title of the recipe.
+     @param recipeLink The uri for this com.example.entree.recipe.
+     @param recipeTitle The title of the com.example.entree.recipe.
      */
     public RecipeCard(Context context, RecipeView parent, AttributeSet attrs, String recipeLink, String recipeTitle)
     {

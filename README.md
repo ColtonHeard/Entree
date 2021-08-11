@@ -23,4 +23,4 @@ Basic U.I. for 'Nutrition' tab implemented
 ~~~Milestone 3~~~
 App UI has been majorly overhauled to meet Material Design standards.
 
-Rudimentary recipe web scraping implemented. 
+Rudimentary com.example.entree.recipe web scraping implemented. 

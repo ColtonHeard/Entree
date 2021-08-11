@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Data = new FoodData();
-
         MenuBarsView menuBars = new MenuBarsView(this, null, this);
 //        ((ViewGroup)mainView.getParent()).removeView(mainView);
         setContentView(menuBars);

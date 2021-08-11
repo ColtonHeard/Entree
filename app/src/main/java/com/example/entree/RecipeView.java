@@ -17,6 +17,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.widget.Guideline;
 
+import com.example.entree.recipe.RecipesDataSource;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -29,7 +31,7 @@ import java.util.concurrent.Executor;
 /**
  Represents a double list view where the top section contains a horizontally scrolling list of IngredientChips and the bottom section contains a vertically scrolling list of RecipeCards.
  */
-public class RecipeView extends EntreeConstraintView implements View.OnClickListener, View.OnLongClickListener, RecipeSearcher.RecipeSearcherListener
+public class RecipeView extends EntreeConstraintView implements View.OnClickListener, View.OnLongClickListener, RecipesDataSource.RecipeDataSourceListener
 {
 
     private int chipTextGuideline, dividerTopGuideline, dividerBottomGuideline, recipeTextGuideline, leftGuideline, rightGuideline, topGuideline, bottomGuideline;
@@ -361,7 +363,7 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
     }
 
     /**
-     Called by one of the RecipeCard subviews. Opens a browser to the recipe using the application's MainActivity.
+     Called by one of the RecipeCard subviews. Opens a browser to the com.example.entree.recipe using the application's MainActivity.
 
      @param intent Should be a ACTION_VIEW intent with a Uri attatched.
      */
@@ -414,7 +416,7 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
     }
 
     @Override
-    public void onRecipesReady(ArrayList<Recipe> recipes)
+    public void onRecipesReady()
     {
 
     }

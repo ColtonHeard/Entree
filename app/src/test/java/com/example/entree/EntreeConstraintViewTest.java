@@ -1,11 +1,5 @@
 package com.example.entree;
 
-import org.junit.Test;
-
-import static org.junit.Assert.*;
-
-import android.content.Context;
-
 public class EntreeConstraintViewTest
 {
 //    @Test

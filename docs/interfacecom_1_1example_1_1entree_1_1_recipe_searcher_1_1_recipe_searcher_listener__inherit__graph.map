@@ -1,4 +1,4 @@
-<map id="com.example.entree.RecipeSearcher.RecipeSearcherListener" name="com.example.entree.RecipeSearcher.RecipeSearcherListener">
+<map id="com.example.entree.recipe.RecipeDataSource.RecipeSearcherListener" name="com.example.entree.recipe.RecipeDataSource.RecipeSearcherListener">
 <area shape="rect" id="node1" title=" " alt="" coords="5,5,221,47"/>
 <area shape="rect" id="node2" href="$classcom_1_1example_1_1entree_1_1_recipe_view.html" title=" " alt="" coords="7,95,219,121"/>
 </map>
