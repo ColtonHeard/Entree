@@ -97,7 +97,6 @@ public class RecipeSearcher
         searchThread.run();
     }
 
-
     /**
      * Calls the attached RecipeSearcherListener and passes the found list of recipes.
      */

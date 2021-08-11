@@ -17,7 +17,7 @@ public class IngredientChip extends Chip
     private final String randomLabel;
 
     /**
-     Initalizes this chip as checkable and adds the passed RecipeView as an OnClickListener. Generates a random label for the chip.
+     Initializes this chip as checkable and adds the passed RecipeView as an OnClickListener. Generates a random label for the chip.
 
      @param context The application context to create this RecipeCard in.
      @param attrs The attribute set to initialize this view with.

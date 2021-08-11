@@ -10,6 +10,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 
 /**
@@ -22,28 +23,12 @@ public class Recipe
 
     private String recipeTitle;
     private Drawable recipeImage;
-    private Uri websiteLink;
+    private URL websiteLink;
     private String recipeDescription;
     private HashMap<String, Integer> recipeIngredients;
     private HashMap<String, String> ingredientUnits;
     private String recipeSource;
     private int recipeCalories;
-
-    /**
-     * Empty constructor that initializes the recipeIngredients and ingredientUnits maps.
-     * All other class variables remain null.
-     */
-    public Recipe()
-    {
-        recipeTitle = null;
-        recipeImage = null;
-        websiteLink = null;
-        recipeDescription = null;
-        recipeIngredients = new HashMap<>();
-        ingredientUnits = new HashMap<>();
-        recipeSource = null;
-        recipeCalories = 0;
-    }
 
     /**
      * More detailed constructor that initializes the Recipe’s title, image, and websiteLink with the passed content.
@@ -53,14 +38,14 @@ public class Recipe
      *
      * @param title The title of this Recipe.
      * @param imageUri The Uri to the image of this Recipe.
-     * @param websiteUri The Uri to the origin website of this Recipe.
+     * @param websiteURL The Uri to the origin website of this Recipe.
      */
-    public Recipe(@NonNull String title, @NonNull Uri imageUri, @NonNull Uri websiteUri)
+    public Recipe(@NonNull String title, @NonNull Uri imageUri, @NonNull URL websiteURL)
     {
         recipeTitle = title;
         recipeImage = null;
         loadImageFromUri(imageUri);
-        websiteLink = websiteUri;
+        websiteLink = websiteURL;
         recipeDescription = null;
         recipeIngredients = new HashMap<>();
         ingredientUnits = new HashMap<>();
@@ -111,15 +96,14 @@ public class Recipe
         }
     }
 
-
     /**
      * Sets the websiteUri of this Recipe to the passed Uri.
      *
-     * @param websiteUri The Uri to this Recipe's source website.
+     * @param websiteURL The Uri to this Recipe's source website.
      */
-    public void setWebsiteUri(Uri websiteUri)
+    public void setWebsiteUri(URL websiteURL)
     {
-        websiteLink = websiteUri;
+        websiteLink = websiteURL;
     }
 
     /**
@@ -190,7 +174,7 @@ public class Recipe
         return recipeImage;
     }
 
-    public Uri getWebsiteLink()
+    public URL getWebsiteLink()
     {
         return websiteLink;
     }

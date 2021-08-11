@@ -79,21 +79,23 @@ public class FoodObjectRecognizer
                                     Rect boundingBox = detectedObject.getBoundingBox();
                                     Integer trackingId = detectedObject.getTrackingId();
 
-                                    for (DetectedObject.Label label : detectedObject.getLabels())
-                                    {
-                                        String text = label.getText();
-                                        if (PredefinedCategory.FOOD.equals(text))
-                                        {
-                                            Log.d("Food", "Bounding box = " + boundingBox.toString());
-                                            foodObjects.add(detectedObject);
-                                        }
-                                    }
+//                                    for (DetectedObject.Label label : detectedObject.getLabels())
+//                                    {
+//                                        String text = label.getText();
+//                                        if (PredefinedCategory.FOOD.equals(text))
+//                                        {
+//                                            Log.d("Food", "Bounding box = " + boundingBox.toString());
+//                                            foodObjects.add(detectedObject);
+//                                        }
+//                                    }
+                                    foodObjects.add(detectedObject);
                                 }
 
                                 foundObjects = foodObjects;
                                 mainActivity.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
+                                        view.setImageReadyForBounding(true);
                                         view.performLongClick();
                                     }
                                 });

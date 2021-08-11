@@ -2,17 +2,12 @@ package com.example.entree;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.content.res.AppCompatResources;
@@ -55,7 +50,7 @@ public class RecipeCard extends MaterialCardView implements View.OnClickListener
     private String link;
 
     /**
-     Initalizes this RecipeCard with the given link and title.
+     Initializes this RecipeCard with the given link and title.
 
      @param context The application context to create this RecipeCard in.
      @param parent The containing parent RecipeView this view belongs to.

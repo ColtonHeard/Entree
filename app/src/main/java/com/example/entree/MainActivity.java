@@ -14,7 +14,8 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+{
 
     private static final int PICK_IMAGE = 100;
     private Uri imageUri;

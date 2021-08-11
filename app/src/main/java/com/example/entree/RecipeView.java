@@ -24,6 +24,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.Executor;
 
 /**
@@ -35,16 +36,16 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
     private int chipTextGuideline, dividerTopGuideline, dividerBottomGuideline, recipeTextGuideline, leftGuideline, rightGuideline, topGuideline, bottomGuideline;
 
     /** Horizontal LinearLayouts responsible for containing the IngredientChips. */
-    private LinearLayout topChipContainer, bottomChipContainer;
+    private final LinearLayout topChipContainer, bottomChipContainer;
 
     /** Vertical Linearlayout responsible for containing the RecipeCards. */
-    private LinearLayout recipeList;
+    private final LinearLayout recipeList;
 
     /** LayoutParams for specifying how chips and the EmptyText view should be layed out. */
-    private LinearLayout.LayoutParams chipParams, emptyTextParams, recipeCardParams;
+    private final LinearLayout.LayoutParams chipParams, emptyTextParams, recipeCardParams;
 
     /** TextView for when no IngredientChips are selected or no results can be found from the web scraper. */
-    private TextView recipeEmptyText;
+    private final TextView recipeEmptyText;
 
     /** ArrayList containing all of the IngredientChips in this view. */
     private ArrayList<IngredientChip> chips;

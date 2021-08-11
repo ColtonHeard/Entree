@@ -1,20 +1,13 @@
 package com.example.entree;
 
 import android.content.Context;
-import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
-import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
@@ -22,14 +15,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.appcompat.content.res.AppCompatResources;
-import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.widget.Toolbar;
-import androidx.compose.ui.platform.ComposeView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.widget.Guideline;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -198,9 +187,10 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
         if (subView != null)
         {
             this.removeView(subView);
+            set.clear(subView.getId());
         }
         subView = v;
-        this.addView(v, new ConstraintLayout.LayoutParams(LayoutParams.MATCH_PARENT, 0));
+        this.addView(v, new ConstraintLayout.LayoutParams(LayoutParams.MATCH_CONSTRAINT, LayoutParams.MATCH_CONSTRAINT));
 
         set.clone(this);
 
@@ -341,7 +331,7 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
         }
         else if (v == cameraMore)
         {
-            // CAMREA ADDITOINAL OPTIONS
+            // CAMERA ADDITIONAL OPTIONS
         }
     }
 
