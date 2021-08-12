@@ -3,6 +3,8 @@ package com.example.entree;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,6 +41,9 @@ public class IngredientView extends EntreeConstraintView
 
     /** Boolean depicting whether or not the view is in edit mode. */
     private boolean editing;
+
+    /** The information view for a specific ingredient or list of ingredients that is currently being displayed. */
+    private View informationView;
 
     /**
      Initializes the view and adds 5 dummy cards.
@@ -260,6 +265,31 @@ public class IngredientView extends EntreeConstraintView
         }
         cards.removeAll(toRemove);
         requestLayout();
+    }
+
+    public void openInformationView(View v)
+    {
+        informationView = v;
+        this.addView(informationView, new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
+        to(informationView, TOP, this, TOP);
+        to(informationView, LEFT, this, LEFT);
+        to(informationView, RIGHT, this, RIGHT);
+        to(informationView, BOTTOM, this, BOTTOM);
+
+        this.setConstraintSet(set);
+        set.applyTo(this);
+
+        informationView.setElevation(100f);
+    }
+
+    public void closeInformationView()
+    {
+        set.clear(informationView.getId());
+        this.removeView(informationView);
+
+        this.setConstraintSet(set);
+        set.applyTo(this);
     }
 
     /**

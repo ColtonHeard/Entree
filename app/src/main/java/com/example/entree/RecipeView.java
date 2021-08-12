@@ -32,7 +32,7 @@ import java.util.concurrent.Executor;
 /**
  Represents a double list view where the top section contains a horizontally scrolling list of IngredientChips and the bottom section contains a vertically scrolling list of RecipeCards.
  */
-public class RecipeView extends EntreeConstraintView implements View.OnClickListener, View.OnLongClickListener, RecipesDataSource.Listener
+public class RecipeView extends EntreeConstraintView implements View.OnClickListener, View.OnLongClickListener, RecipesDataSource.RecipeDataSourceListener
 {
 
     private int chipTextGuideline, dividerTopGuideline, dividerBottomGuideline, recipeTextGuideline, leftGuideline, rightGuideline, topGuideline, bottomGuideline;
@@ -53,18 +53,13 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
     private ArrayList<IngredientChip> chips;
 
     /** ArrayList containing all the RecipeCards in this view. */
-    private ArrayList<RecipeCard> recipes;
+    private ArrayList<Recipe> recipes;
 
     /** Reference to the application's MainActivity */
     private final MainActivity mainActivity;
 
-    private static final Executor executor = new Executor() {
-        @Override
-        public void execute(Runnable command)
-        {
-            command.run();
-        }
-    };
+    /** The data source to load new recipes from. */
+    private final RecipesDataSource recipesDataSource;
 
     /** Represents the number of IngredientChips currently added to this view. */
     private int count;
@@ -85,6 +80,7 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
         chips = new ArrayList<>();
         recipes = null;
         mainActivity = main;
+        recipesDataSource = RecipesDataSource.makeDataSource(RecipesDataSource.Sources.ALL_RECIPES, this);
 
         count = 0;
         chipParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -277,25 +273,43 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
      Returns a string containing the names of all selected ingredients in the form "one+two+three+...".
      Intended for use with the web scraper.
      */
-    private String getSelectedIngredients()
+    private ArrayList<String> getSelectedIngredients()
     {
-        String ingredients = "";
+        ArrayList<String> ingredients = new ArrayList<>();
 
         for (IngredientChip chip: chips)
         {
             if (chip.isChecked()) {
                 if (ingredients.equals(""))
                 {
-                    ingredients += chip.getText().toString().toLowerCase();
+                    ingredients.add(chip.getText().toString().toLowerCase());
                 }
                 else
                 {
-                    ingredients += "+" + chip.getText().toString().toLowerCase();
+                    ingredients.add(chip.getText().toString().toLowerCase());
                 }
             }
         }
 
         return ingredients;
+
+//        String ingredients = "";
+//
+//        for (IngredientChip chip: chips)
+//        {
+//            if (chip.isChecked()) {
+//                if (ingredients.equals(""))
+//                {
+//                    ingredients += chip.getText().toString().toLowerCase();
+//                }
+//                else
+//                {
+//                    ingredients += "+" + chip.getText().toString().toLowerCase();
+//                }
+//            }
+//        }
+//
+//        return ingredients;
     }
 
     /**
@@ -303,59 +317,63 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
      */
     private void getWebsite()
     {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                final StringBuilder builder = new StringBuilder();
-                ArrayList<RecipeCard> foundRecipes = new ArrayList<>();
 
-                try {
-                    Log.d("JSoupURL", "https://www.google.com/search?q=" + getSelectedIngredients() + "+recipes");
-                    Document doc = Jsoup.connect("https://www.google.com/search?q=" + getSelectedIngredients() + "+recipes").get();
-                    String title = doc.title();
-                    Elements links = doc.select("a[href]");
+        recipesDataSource.setIngredients(getSelectedIngredients());
+        recipesDataSource.getRecipes();
 
-                    builder.append(title).append("\n");
-
-                    int skipCount = 0;
-                    for(Element link: links)
-                    {
-                        if (skipCount < 4)
-                        {
-                            skipCount++;
-                            continue;
-                        }
-
-                        if(!link.text().equals("Images") && !link.text().equals("Videos") && !link.text().equals("News") && !link.text().equals("Maps")
-                                && !link.text().equals("Shopping") && !link.text().equals("Books") && !link.text().equals("Flights") && !link.text().equals("More results")
-                                && !link.text().equals("Feedback") && !link.text().equals(""))
-                        {
-                            builder.append("------------------").append("\n").append("Link : ").append(link.attr("href"))
-                                    .append("\n").append("Title : ").append(link.text()).append("\n");
-
-                            RecipeCard card = new RecipeCard(getContext(), getSelf(),null, link.attr("href"), link.text());
-                            foundRecipes.add(card);
-
-                        }
-                    }
-                } catch (IOException e)
-                {
-                    builder.append("Error :").append(e.getMessage()).append("\n");
-                }
-
-                mainActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        for (int i = 0; i < 14; i++)
-                        {
-                            foundRecipes.remove(foundRecipes.size() - 1);
-                        }
-                        recipes = foundRecipes;
-                        performLongClick();
-                    }
-                });
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                final StringBuilder builder = new StringBuilder();
+//                ArrayList<RecipeCard> foundRecipes = new ArrayList<>();
+//
+//                try {
+//                    Log.d("JSoupURL", "https://www.google.com/search?q=" + getSelectedIngredients() + "+recipes");
+//                    Document doc = Jsoup.connect("https://www.google.com/search?q=" + getSelectedIngredients() + "+recipes").get();
+//                    String title = doc.title();
+//                    Elements links = doc.select("a[href]");
+//
+//                    builder.append(title).append("\n");
+//
+//                    int skipCount = 0;
+//                    for(Element link: links)
+//                    {
+//                        if (skipCount < 4)
+//                        {
+//                            skipCount++;
+//                            continue;
+//                        }
+//
+//                        if(!link.text().equals("Images") && !link.text().equals("Videos") && !link.text().equals("News") && !link.text().equals("Maps")
+//                                && !link.text().equals("Shopping") && !link.text().equals("Books") && !link.text().equals("Flights") && !link.text().equals("More results")
+//                                && !link.text().equals("Feedback") && !link.text().equals(""))
+//                        {
+//                            builder.append("------------------").append("\n").append("Link : ").append(link.attr("href"))
+//                                    .append("\n").append("Title : ").append(link.text()).append("\n");
+//
+//                            RecipeCard card = new RecipeCard(getContext(), getSelf(),null, link.attr("href"), link.text());
+//                            foundRecipes.add(card);
+//
+//                        }
+//                    }
+//                } catch (IOException e)
+//                {
+//                    builder.append("Error :").append(e.getMessage()).append("\n");
+//                }
+//
+//                mainActivity.runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        for (int i = 0; i < 14; i++)
+//                        {
+//                            foundRecipes.remove(foundRecipes.size() - 1);
+//                        }
+//                        recipes = foundRecipes;
+//                        performLongClick();
+//                    }
+//                });
+//            }
+//        }).start();
     }
 
     private RecipeView getSelf()
@@ -408,17 +426,24 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
         else if (recipes != null)
         {
             recipeList.removeAllViews();
-            for (RecipeCard card: recipes)
+            for (Recipe recipe: recipes)
             {
-                recipeList.addView(card, recipeCardParams);
+                recipeList.addView(new RecipeCard(getContext(), this, null, recipe), recipeCardParams);
             }
         }
+
         return true;
     }
 
     @Override
     public void onRecipesReady(ArrayList<Recipe> recipes)
     {
-
+        this.recipes = recipes;
+        mainActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                onLongClick(null);
+            }
+        });
     }
 }

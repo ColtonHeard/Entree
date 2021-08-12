@@ -34,7 +34,7 @@ public class AllRecipesDataSource extends RecipesDataSource {
     private Integer page = 1;
     private Boolean hasNextPage = true;
 
-    public AllRecipesDataSource(Listener recipeListener) {
+    public AllRecipesDataSource(RecipeDataSourceListener recipeListener) {
         super(recipeListener);
     }
 
@@ -93,7 +93,7 @@ public class AllRecipesDataSource extends RecipesDataSource {
         });
 
         searchThread.setPriority(Thread.NORM_PRIORITY);
-        searchThread.run();
+        searchThread.start();
     }
 
     public void notifyListener() {

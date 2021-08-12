@@ -3,7 +3,7 @@ package com.example.entree.recipe;
 import java.util.ArrayList;
 
 public abstract class RecipesDataSource {
-    enum Sources {
+    public enum Sources {
         ALL_RECIPES
     }
 
@@ -11,14 +11,14 @@ public abstract class RecipesDataSource {
      * Listener interface for RecipeSearcher results.
      * Specifically implemented by RecipeView to receive search results.
      */
-    public interface Listener {
+    public interface RecipeDataSourceListener {
         /**
          * Called by RecipeSearcher when it has a list of recipes to pass to it's listener.
          */
         void onRecipesReady(ArrayList<Recipe> recipes);
     }
 
-    public static RecipesDataSource makeDataSource(Sources type, Listener listener) {
+    public static RecipesDataSource makeDataSource(Sources type, RecipeDataSourceListener listener) {
         switch (type) {
             case ALL_RECIPES:
                 return new AllRecipesDataSource(listener);
@@ -30,7 +30,7 @@ public abstract class RecipesDataSource {
     /**
      * The attached RecipeSearcherListener in which to return search results to.
      */
-    protected Listener listener;
+    protected RecipeDataSourceListener listener;
     /**
      * The list of recipes resulting from a search.
      */
@@ -46,7 +46,7 @@ public abstract class RecipesDataSource {
      *
      * @param recipeListener The RecipeView to return search results to.
      */
-    public RecipesDataSource(Listener recipeListener) {
+    public RecipesDataSource(RecipeDataSourceListener recipeListener) {
         listener = recipeListener;
     }
     public abstract void getRecipes();

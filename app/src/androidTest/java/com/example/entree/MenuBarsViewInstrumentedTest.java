@@ -1,6 +1,7 @@
 package com.example.entree;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -11,7 +12,12 @@ import org.junit.runner.RunWith;
 
 import static org.junit.Assert.*;
 
-import com.google.android.material.appbar.MaterialToolbar;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 @RunWith(AndroidJUnit4.class)
 public class MenuBarsViewInstrumentedTest
@@ -85,5 +91,6 @@ public class MenuBarsViewInstrumentedTest
 
         assertTrue(v.getBottomView() != null);
     }
+
 
 }

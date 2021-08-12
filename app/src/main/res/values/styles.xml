@@ -10,4 +10,15 @@
         <item name="android:stateListAnimator">@animator/mtrl_btn_unelevated_state_list_anim</item>
     </style>
 
+    <style name="Widget.App.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="colorPrimary">@color/entree_dark_orange</item>
+        <item name="colorOnSurface">@color/white</item>
+        <item name="colorError">@color/entree_dark_red</item>
+    </style>
+
+    <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">cut</item>
+        <item name="cornerSize">4dp</item>
+    </style>
+
 </resources>

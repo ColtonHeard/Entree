@@ -7,11 +7,11 @@ import java.util.ArrayList;
 
 public class Recipe
 {
-    final String title;
-    final Bitmap image;
-    final URL url;
-    final String description;
-    final ArrayList<String> ingredients;
+    public final String title;
+    public final Bitmap image;
+    public final URL url;
+    public final String description;
+    public final ArrayList<String> ingredients;
 
     public Recipe(String title,
                   Bitmap image,

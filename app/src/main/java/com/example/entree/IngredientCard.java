@@ -226,7 +226,7 @@ public class IngredientCard extends MaterialCardView implements View.OnClickList
         }
         else
         {
-            //Open more nutrition information
+            ((IngredientView) getParent()).openInformationView(new InformationView(getContext(), null));
         }
     }
 }

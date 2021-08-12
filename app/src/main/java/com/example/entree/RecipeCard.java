@@ -2,6 +2,7 @@ package com.example.entree;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -15,6 +16,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.widget.Guideline;
 
+import com.example.entree.recipe.Recipe;
 import com.google.android.material.card.MaterialCardView;
 
 /*
@@ -49,16 +51,17 @@ public class RecipeCard extends MaterialCardView implements View.OnClickListener
     /** String containing a Uri to the scraped com.example.entree.recipe link. */
     private String link;
 
+    private Recipe recipe;
+
     /**
      Initializes this RecipeCard with the given link and title.
 
      @param context The application context to create this RecipeCard in.
      @param parent The containing parent RecipeView this view belongs to.
      @param attrs The attribute set to initialize this view with.
-     @param recipeLink The uri for this com.example.entree.recipe.
-     @param recipeTitle The title of the com.example.entree.recipe.
+     @param recipe The Recipe object containing all information about this recipe.
      */
-    public RecipeCard(Context context, RecipeView parent, AttributeSet attrs, String recipeLink, String recipeTitle)
+    public RecipeCard(Context context, RecipeView parent, AttributeSet attrs, Recipe recipeIn)
     {
         super(context, attrs);
         setId(generateViewId());
@@ -69,7 +72,8 @@ public class RecipeCard extends MaterialCardView implements View.OnClickListener
 
         set = new ConstraintSet();
         layout = new ConstraintLayout(context, attrs);
-        link = recipeLink;
+        recipe = recipeIn;
+        link = recipe.url.toString();
         this.parent = parent;
 
         this.addView(layout);
@@ -78,13 +82,13 @@ public class RecipeCard extends MaterialCardView implements View.OnClickListener
         ImageView image = new ImageView(layout.getContext(), attrs);
         image.setId(ImageView.generateViewId());
         image.setScaleType(ImageView.ScaleType.FIT_XY);
-        image.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.foodimage));
+        image.setImageDrawable(new BitmapDrawable(getResources(), recipe.image));
 
         layout.addView(image, new ConstraintLayout.LayoutParams(0, 0));
 
         TextView title = new TextView(layout.getContext(), attrs);
         title.setId(TextView.generateViewId());
-        title.setText(recipeTitle);
+        title.setText(recipe.title);
 //        title.setTypeface(title.getTypeface(), Typeface.BOLD);
         title.setTextColor(getResources().getColor(R.color.black));
         title.setTextSize(20);
@@ -94,16 +98,16 @@ public class RecipeCard extends MaterialCardView implements View.OnClickListener
 
         layout.addView(title, new ConstraintLayout.LayoutParams(0, 0));
 
-        String testDescription = "Filler text";
-
-        for (int i = 0; i < ((int) (Math.random() * 80)); i++)
-        {
-            testDescription += " text";
-        }
+//        String testDescription = "Filler text";
+//
+//        for (int i = 0; i < ((int) (Math.random() * 80)); i++)
+//        {
+//            testDescription += " text";
+//        }
 
         TextView text = new TextView(layout.getContext(), attrs);
         text.setId(TextView.generateViewId());
-        text.setText(testDescription);
+        text.setText(recipe.description);
         text.setTextColor(getResources().getColor(R.color.light_gray));
         text.setTextSize(12);
         text.setMaxLines(3);
