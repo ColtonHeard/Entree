@@ -6,7 +6,6 @@ import com.example.entree.recipe.Recipe;
 import static org.junit.Assert.*;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -17,10 +16,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -102,7 +99,7 @@ public class AllRecipesDataSourceTest {
     public void testGetNextElement() throws InterruptedException {
 
         ArrayList<Recipe> recipies = new ArrayList<>();
-        dataSource.setIngredientsArray(new ArrayList<String>(Arrays.asList(new String[]{"strawberry"})));
+        dataSource.setIngredients(new ArrayList<String>(Arrays.asList(new String[]{"strawberry"})));
 
             dataSource.getRecipes();
 

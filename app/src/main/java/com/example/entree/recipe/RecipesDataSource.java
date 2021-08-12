@@ -7,7 +7,18 @@ public abstract class RecipesDataSource {
         ALL_RECIPES
     }
 
-    public static RecipesDataSource makeDataSource(Sources type, RecipeDataSourceListener listener) {
+    /**
+     * Listener interface for RecipeSearcher results.
+     * Specifically implemented by RecipeView to receive search results.
+     */
+    public interface Listener {
+        /**
+         * Called by RecipeSearcher when it has a list of recipes to pass to it's listener.
+         */
+        void onRecipesReady(ArrayList<Recipe> recipes);
+    }
+
+    public static RecipesDataSource makeDataSource(Sources type, Listener listener) {
         switch (type) {
             case ALL_RECIPES:
                 return new AllRecipesDataSource(listener);
@@ -15,21 +26,11 @@ public abstract class RecipesDataSource {
                 return null;
         }
     }
-    /**
-     * Listener interface for RecipeSearcher results.
-     * Specifically implemented by RecipeView to receive search results.
-     */
-    public interface RecipeDataSourceListener {
-        /**
-         * Called by RecipeSearcher when it has a list of recipes to pass to it's listener.
-         */
-        void onRecipesReady(ArrayList<Recipe> recipes);
-    }
 
     /**
      * The attached RecipeSearcherListener in which to return search results to.
      */
-    protected RecipeDataSourceListener listener;
+    protected Listener listener;
     /**
      * The list of recipes resulting from a search.
      */
@@ -45,9 +46,9 @@ public abstract class RecipesDataSource {
      *
      * @param recipeListener The RecipeView to return search results to.
      */
-    public RecipesDataSource(RecipesDataSource.RecipeDataSourceListener recipeListener) {
+    public RecipesDataSource(Listener recipeListener) {
         listener = recipeListener;
     }
     public abstract void getRecipes();
-    public abstract void setIngredientsArray(ArrayList<String> ingredientsArray);
+    public abstract void setIngredients(ArrayList<String> ingredientsArray);
 }

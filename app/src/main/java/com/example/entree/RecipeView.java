@@ -27,13 +27,12 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.concurrent.Executor;
 
 /**
  Represents a double list view where the top section contains a horizontally scrolling list of IngredientChips and the bottom section contains a vertically scrolling list of RecipeCards.
  */
-public class RecipeView extends EntreeConstraintView implements View.OnClickListener, View.OnLongClickListener, RecipesDataSource.RecipeDataSourceListener
+public class RecipeView extends EntreeConstraintView implements View.OnClickListener, View.OnLongClickListener, RecipesDataSource.Listener
 {
 
     private int chipTextGuideline, dividerTopGuideline, dividerBottomGuideline, recipeTextGuideline, leftGuideline, rightGuideline, topGuideline, bottomGuideline;

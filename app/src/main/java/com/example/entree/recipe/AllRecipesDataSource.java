@@ -20,7 +20,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -35,11 +34,11 @@ public class AllRecipesDataSource extends RecipesDataSource {
     private Integer page = 1;
     private Boolean hasNextPage = true;
 
-    public AllRecipesDataSource(RecipeDataSourceListener recipeListener) {
+    public AllRecipesDataSource(Listener recipeListener) {
         super(recipeListener);
     }
 
-    public void setIngredientsArray(ArrayList<String> ingredientsArray) {
+    public void setIngredients(ArrayList<String> ingredientsArray) {
         if (searchThread != null) {
             searchThread.interrupt(); // No guarantee its null by...
         }
