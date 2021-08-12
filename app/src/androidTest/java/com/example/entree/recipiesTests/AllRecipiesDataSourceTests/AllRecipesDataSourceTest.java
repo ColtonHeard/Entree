@@ -20,9 +20,11 @@ import org.junit.runner.RunWith;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -40,7 +42,7 @@ public class AllRecipesDataSourceTest {
 
     @Before
     public void setUp() throws MalformedURLException, FileNotFoundException {
-        dataSource = new AllRecipesDataSource(() -> {});
+        dataSource = new AllRecipesDataSource((recipes) -> {});
         ingredients = new ArrayList<>();
 
         correctURL = new URL("https://www.allrecipes.com/element-api/content-proxy/faceted-searches-load-more?page=1&IngIncl=strawberry");
@@ -100,11 +102,11 @@ public class AllRecipesDataSourceTest {
     public void testGetNextElement() throws InterruptedException {
 
         ArrayList<Recipe> recipies = new ArrayList<>();
+        dataSource.setIngredientsArray(new ArrayList<String>(Arrays.asList(new String[]{"strawberry"})));
 
-        for (int i = 0; i < 50; i++) {
-            recipies.add(dataSource.nextElement());
-            Thread.currentThread().sleep(100);
-        }
+            dataSource.getRecipes();
+
+
 
     }
 

@@ -33,21 +33,10 @@ public class AllRecipesDataSource extends RecipesDataSource {
     public class MalformedHtml extends Exception {}
 
     private Integer page = 1;
-    private Boolean hsaNextPage = true;
+    private Boolean hasNextPage = true;
 
     public AllRecipesDataSource(RecipeDataSourceListener recipeListener) {
         super(recipeListener);
-    }
-
-    public boolean hasMoreElements() {
-        return hsaNextPage || !recipes.isEmpty();
-    }
-
-    public Recipe nextElement() throws NoSuchElementException {
-        if (hasMoreElements() == false) {throw new NoSuchElementException();}
-        if (recipes.isEmpty()) {return null;};
-        if (recipes.size() <= 5) {getRecipes();}
-        return recipes.remove(0);
     }
 
     public void setIngredientsArray(ArrayList<String> ingredientsArray) {
@@ -55,18 +44,23 @@ public class AllRecipesDataSource extends RecipesDataSource {
             searchThread.interrupt(); // No guarantee its null by...
         }
         this.ingredientsArray = ingredientsArray;
-        recipes = new ArrayList<Recipe>();
+        recipesCache = new ArrayList<Recipe>();
         page = 1;
         getRecipes(); // This call
     }
 
 
-    protected void getRecipes() {
+    public void getRecipes() {
         if (searchThread != null) {return;}
 
         searchThread = new Thread(new Runnable() {
             @Override
             public void run() {
+                if (!hasNextPage) {
+                    listener.onRecipesReady(null) ;
+                     return;
+                };
+
                 HttpURLConnection connection;
                 try {connection = buildRequestConnectionFor(ingredientsArray, page);}
                 catch (IOException e) {e.printStackTrace(); return;}
@@ -82,7 +76,7 @@ public class AllRecipesDataSource extends RecipesDataSource {
                 String html;
                 try {
                     html = responseJson.getString("html");;
-                    hsaNextPage = responseJson.getBoolean("hasNext");
+                    hasNextPage = responseJson.getBoolean("hasNext");
                 }
                 catch (JSONException e) {e.printStackTrace(); return;}
 
@@ -92,15 +86,20 @@ public class AllRecipesDataSource extends RecipesDataSource {
                 try {recipesList = getRecipesFrom(html);}
                 catch (IOException e) {e.printStackTrace(); return;}
 
-                recipes.addAll(recipesList);
+                recipesCache = recipesList;
+                notifyListener();
                 page++;
-                listener.onRecipesReady();
                 return;
             }
         });
 
         searchThread.setPriority(Thread.NORM_PRIORITY);
         searchThread.run();
+    }
+
+    public void notifyListener() {
+        listener.onRecipesReady(recipesCache);
+        getRecipes();
     }
 
     public HttpsURLConnection buildRequestConnectionFor(ArrayList<String> ingredients, Integer page) throws IOException {
@@ -235,6 +234,5 @@ public class AllRecipesDataSource extends RecipesDataSource {
 
         return recipes;
     }
-
 
 }

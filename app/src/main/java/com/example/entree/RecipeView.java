@@ -17,6 +17,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.widget.Guideline;
 
+import com.example.entree.recipe.Recipe;
 import com.example.entree.recipe.RecipesDataSource;
 
 import org.jsoup.Jsoup;
@@ -417,7 +418,7 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
     }
 
     @Override
-    public void onRecipesReady()
+    public void onRecipesReady(ArrayList<Recipe> recipes)
     {
 
     }

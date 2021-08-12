@@ -1,9 +1,20 @@
 package com.example.entree.recipe;
 
 import java.util.ArrayList;
-import java.util.Enumeration;
 
-public abstract class RecipesDataSource implements Enumeration<Recipe> {
+public abstract class RecipesDataSource {
+    enum Sources {
+        ALL_RECIPES
+    }
+
+    public static RecipesDataSource makeDataSource(Sources type, RecipeDataSourceListener listener) {
+        switch (type) {
+            case ALL_RECIPES:
+                return new AllRecipesDataSource(listener);
+            default:
+                return null;
+        }
+    }
     /**
      * Listener interface for RecipeSearcher results.
      * Specifically implemented by RecipeView to receive search results.
@@ -12,7 +23,7 @@ public abstract class RecipesDataSource implements Enumeration<Recipe> {
         /**
          * Called by RecipeSearcher when it has a list of recipes to pass to it's listener.
          */
-        public void onRecipesReady();
+        void onRecipesReady(ArrayList<Recipe> recipes);
     }
 
     /**
@@ -22,7 +33,7 @@ public abstract class RecipesDataSource implements Enumeration<Recipe> {
     /**
      * The list of recipes resulting from a search.
      */
-    protected ArrayList<Recipe> recipes = new ArrayList<>();
+    protected ArrayList<Recipe> recipesCache = new ArrayList<>();
     protected ArrayList<String> ingredientsArray;
     /**
      * The active thread used for the current search.
@@ -37,6 +48,6 @@ public abstract class RecipesDataSource implements Enumeration<Recipe> {
     public RecipesDataSource(RecipesDataSource.RecipeDataSourceListener recipeListener) {
         listener = recipeListener;
     }
-    protected abstract void getRecipes();
+    public abstract void getRecipes();
     public abstract void setIngredientsArray(ArrayList<String> ingredientsArray);
 }
