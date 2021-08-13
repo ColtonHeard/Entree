@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ScrollView;
 
 import androidx.annotation.ColorInt;
@@ -74,6 +75,8 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
     private final BottomNavigationView bottomView;
     private final AppCompatActivity activity;
 
+    private boolean hideIngredientButtons;
+
     /**
      Creates and lays out the application menu bars and sets the CameraView as the currently open subview.
 
@@ -92,7 +95,7 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
         ingredientView = new IngredientView(context, attrs);
         ingredientScroll = new ScrollView(context, attrs);
         ingredientScroll.setId(ScrollView.generateViewId());
-        ingredientScroll.addView(ingredientView);
+        ingredientScroll.addView(ingredientView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0));
 
         recipeView = new RecipeView(context, attrs, mainActivity);
 
@@ -190,7 +193,7 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
             set.clear(subView.getId());
         }
         subView = v;
-        this.addView(v, new ConstraintLayout.LayoutParams(LayoutParams.MATCH_CONSTRAINT, LayoutParams.MATCH_CONSTRAINT));
+        this.addView(v, new ConstraintLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_CONSTRAINT));
 
         set.clone(this);
 
@@ -266,9 +269,11 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
             topBar.setTitle("Ingredient List");
             switchView(ingredientScroll);
             removeAllActionButtons();
-            topBar.addView(ingredientMore);
-            topBar.addView(editIngredients);
-            topBar.addView(addIngredient);
+            if (!hideIngredientButtons) {
+                topBar.addView(ingredientMore);
+                topBar.addView(editIngredients);
+                topBar.addView(addIngredient);
+            }
 
             if (ingredientView.isEditing())
             {
@@ -333,6 +338,22 @@ public class MenuBarsView extends EntreeConstraintView implements View.OnClickLi
         {
             // CAMERA ADDITIONAL OPTIONS
         }
+    }
+
+    public void showIngredientActionButtons()
+    {
+        topBar.addView(ingredientMore);
+        topBar.addView(editIngredients);
+        topBar.addView(addIngredient);
+        hideIngredientButtons = false;
+    }
+
+    public void hideIngredientActionButtons()
+    {
+        topBar.removeView(addIngredient);
+        topBar.removeView(ingredientMore);
+        topBar.removeView(editIngredients);
+        hideIngredientButtons = true;
     }
 
     public View getSubView() {

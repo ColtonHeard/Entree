@@ -18,7 +18,7 @@ public class FoodData {
 
     public FoodData()
     {
-        name = "None";
+        name = "Example Food";
         calories = "0";
         fat = "0g";
         saturated = "0g";

@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity
 
         Data = new FoodData();
         MenuBarsView menuBars = new MenuBarsView(this, null, this);
-//        ((ViewGroup)mainView.getParent()).removeView(mainView);
         setContentView(menuBars);
 
     }
@@ -55,48 +54,6 @@ public class MainActivity extends AppCompatActivity
         {
             imageUri = data.getData();
             camera.setImageURI(imageUri);
-        }
-    }
-
-    private void readFoodData()
-    {
-        // Read the raw csv file
-        // Reads text from character-input stream, buffering characters for efficient reading
-        BufferedReader reader = new BufferedReader(
-            new InputStreamReader(getResources().openRawResource(R.raw.food), Charset.forName("UTF-8"))
-        );
-
-
-        String line = "";
-
-        try
-        {
-            // Step over headers
-            reader.readLine();
-
-            // If buffer is not empty
-            while ((line = reader.readLine()) != null)
-            {
-                // use comma as separator columns of CSV
-                String[] tokens = line.split(",");
-
-                // Read the data
-                FoodData data = new FoodData();
-                data.setArray(tokens);
-
-                // Add the read food to the FoodData HashMap
-                foodMap.put(data.getName().toLowerCase(), data);
-            }
-
-            reader.close();
-        }
-        catch (IOException e)
-        {
-            // Logs error with priority level
-            Log.wtf("MyActivityError", "Error reading data file on line" + line, e);
-
-            // Prints throwable details
-            e.printStackTrace();
         }
     }
 

@@ -46,13 +46,15 @@ public class IngredientCard extends MaterialCardView implements View.OnClickList
     /** The inner ConstraintLayout of this IngredientCard */
     private final ConstraintLayout layout;
 
+    private final FoodData data;
+
     /**
      Creates and lays out a new IngredientCard using the default image.
 
      @param context The application context to create this RecipeCard in.
      @param attrs The attribute set to initialize this view with.
      */
-    public IngredientCard(Context context, AttributeSet attrs)
+    public IngredientCard(Context context, AttributeSet attrs, FoodData dataIn)
     {
         super(context, attrs);
 
@@ -73,6 +75,7 @@ public class IngredientCard extends MaterialCardView implements View.OnClickList
         this.setOnClickListener(this);
         this.setRadius(10);
 
+        data = dataIn;
         set = new ConstraintSet();
         layout = new ConstraintLayout(context, attrs);
 
@@ -88,25 +91,18 @@ public class IngredientCard extends MaterialCardView implements View.OnClickList
 
         TextView title = new TextView(layout.getContext(), attrs);
         title.setId(TextView.generateViewId());
-        title.setText("Ingredient Name");
+        title.setText(data.getName());
         title.setTypeface(title.getTypeface(), Typeface.BOLD);
-        title.setTextSize(12);
+        title.setTextSize(16);
         title.setGravity(Gravity.BOTTOM | Gravity.LEFT);
 
         layout.addView(title, new ConstraintLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT));
 
-        String testDescription = "Description";
-
-        for (int i = 0; i < ((int) (Math.random() * 10)); i++)
-        {
-            testDescription += " details";
-        }
-
         TextView text = new TextView(layout.getContext(), attrs);
         text.setId(TextView.generateViewId());
-        text.setText(testDescription);
+        text.setText(data.getCalories() + " kCal per 100g");
         text.setTextColor(getResources().getColor(R.color.light_gray));
-        text.setTextSize(8);
+        text.setTextSize(10);
         text.setMaxLines(3);
         text.setEllipsize(TextUtils.TruncateAt.END);
 
@@ -226,7 +222,7 @@ public class IngredientCard extends MaterialCardView implements View.OnClickList
         }
         else
         {
-            ((IngredientView) getParent()).openInformationView(new InformationView(getContext(), null));
+            ((IngredientView) getParent()).openInformationView(new InformationView(getContext(), null, ((IngredientView) getParent()), data));
         }
     }
 }

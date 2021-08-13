@@ -5,9 +5,11 @@
       <map>
         <entry key="..\:/Users/Colton/StudioProjects/Entree/app/src/main/res/drawable/add_image.xml" value="0.42685185185185187" />
         <entry key="..\:/Users/Colton/StudioProjects/Entree/app/src/main/res/drawable/dark_check_icon.xml" value="0.4158974358974359" />
+        <entry key="..\:/Users/Colton/StudioProjects/Entree/app/src/main/res/drawable/food_icon.xml" value="0.5615384615384615" />
+        <entry key="..\:/Users/Colton/StudioProjects/Entree/app/src/main/res/drawable/loading_icon.xml" value="0.5615384615384615" />
         <entry key="..\:/Users/Colton/StudioProjects/Entree/app/src/main/res/layout/activity_main.xml" value="0.5" />
         <entry key="..\:/Users/Colton/StudioProjects/Entree/app/src/main/res/layout/ingredient_list.xml" value="0.3338541666666667" />
-        <entry key="..\:/Users/Colton/StudioProjects/Entree/app/src/main/res/layout/nutrition_view.xml" value="0.40625" />
+        <entry key="..\:/Users/Colton/StudioProjects/Entree/app/src/main/res/layout/nutrition_view.xml" value="0.67" />
       </map>
     </option>
   </component>

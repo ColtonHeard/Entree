@@ -6,7 +6,11 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -32,7 +36,7 @@ import java.util.concurrent.Executor;
 /**
  Represents a double list view where the top section contains a horizontally scrolling list of IngredientChips and the bottom section contains a vertically scrolling list of RecipeCards.
  */
-public class RecipeView extends EntreeConstraintView implements View.OnClickListener, View.OnLongClickListener, RecipesDataSource.RecipeDataSourceListener
+public class RecipeView extends EntreeConstraintView implements View.OnClickListener, View.OnLongClickListener, RecipesDataSource.RecipeDataSourceListener, View.OnScrollChangeListener
 {
 
     private int chipTextGuideline, dividerTopGuideline, dividerBottomGuideline, recipeTextGuideline, leftGuideline, rightGuideline, topGuideline, bottomGuideline;
@@ -43,11 +47,20 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
     /** Vertical Linearlayout responsible for containing the RecipeCards. */
     private final LinearLayout recipeList;
 
+    /** The ScrollView that contains recipe results. */
+    private final ScrollView recipeScroll;
+
     /** LayoutParams for specifying how chips and the EmptyText view should be layed out. */
     private final LinearLayout.LayoutParams chipParams, emptyTextParams, recipeCardParams;
 
     /** TextView for when no IngredientChips are selected or no results can be found from the web scraper. */
     private final TextView recipeEmptyText;
+
+    /** Image shown to the user while waiting for recipe results to be returned. */
+    private final ImageView loadingImage;
+
+    /** The animation applied to the loading image. */
+    private final RotateAnimation loadingAnimation;
 
     /** ArrayList containing all of the IngredientChips in this view. */
     private ArrayList<IngredientChip> chips;
@@ -63,6 +76,14 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
 
     /** Represents the number of IngredientChips currently added to this view. */
     private int count;
+
+    /** Represents if the view currently has a list of RecipeResults */
+    private boolean hasResults;
+
+    private boolean loading;
+
+    /** The last total number of IngredientChips that were selected. */
+    private int lastSelectedCount;
 
     /**
      * Creates a new RecipeView with the appropriate layout.
@@ -81,6 +102,8 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
         recipes = null;
         mainActivity = main;
         recipesDataSource = RecipesDataSource.makeDataSource(RecipesDataSource.Sources.ALL_RECIPES, this);
+        hasResults = false;
+        lastSelectedCount = 0;
 
         count = 0;
         chipParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -135,10 +158,12 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
         recipeText.setTextColor(getResources().getColor(R.color.black));
         this.addView(recipeText, new ConstraintLayout.LayoutParams(0, 0));
 
-        ScrollView recipeScroll = new ScrollView(context, attrs);
+        recipeScroll = new ScrollView(context, attrs);
         recipeScroll.setId(ScrollView.generateViewId());
+        recipeScroll.setOnScrollChangeListener(this);
 //        recipeScroll.setBackgroundColor(getResources().getColor(R.color.light_gray));
         this.addView(recipeScroll, new ConstraintLayout.LayoutParams(0, 0));
+
 
         recipeList = new LinearLayout(context, attrs);
         recipeList.setOrientation(LinearLayout.VERTICAL);
@@ -147,12 +172,21 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
 
         recipeEmptyText = new TextView(context, attrs);
         recipeEmptyText.setText("No results: Add ingredients or change the search ingredients");
-        recipeEmptyText.setTextColor(getResources().getColor(R.color.black));
+        recipeEmptyText.setTextColor(getResources().getColor(R.color.light_gray));
         recipeEmptyText.setGravity(Gravity.CENTER);
         recipeEmptyText.setMaxLines(100);
         recipeEmptyText.setTextSize(18);
 
         recipeList.addView(recipeEmptyText, emptyTextParams);
+
+        loadingImage = new ImageView(context, attrs);
+        loadingImage.setImageDrawable(getResources().getDrawable(R.drawable.loading_icon));
+//        loadingImage.setImageResource(R.drawable.loading_icon);
+
+        loadingAnimation = new RotateAnimation(0, 359.9f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        loadingAnimation.setDuration(3000);
+        loadingAnimation.setRepeatCount(Animation.INFINITE);
+        loadingAnimation.setInterpolator(new LinearInterpolator());
 
         /*
         Begin setting layout constraints
@@ -315,12 +349,23 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
     /**
     Runs the web scraper to search for recipes with the currently selected ingredients. Results are stored in the recipes variable before calling this class's OnLongClick method.
      */
-    private void getWebsite()
-    {
+    private void getWebsite() {
 
-        recipesDataSource.setIngredients(getSelectedIngredients());
-        recipesDataSource.getRecipes();
+        if (!loading)
+        {
+            if (lastSelectedCount != getSelectedCount()) {
+                recipeList.removeAllViews();
+                lastSelectedCount = getSelectedCount();
+                recipesDataSource.setIngredients(getSelectedIngredients());
+            }
 
+//            disableChips();
+            loading = true;
+            recipeList.addView(loadingImage);
+            loadingImage.startAnimation(loadingAnimation);
+
+            recipesDataSource.getRecipes();
+        }
 //        new Thread(new Runnable() {
 //            @Override
 //            public void run() {
@@ -391,6 +436,34 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
         mainActivity.startActivity(intent);
     }
 
+    private int getSelectedCount()
+    {
+        int count = 0;
+        for (IngredientChip chip: chips)
+        {
+            if (chip.isChecked()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private void enableChips()
+    {
+        for (IngredientChip chip: chips)
+        {
+            chip.setCheckable(true);
+        }
+    }
+
+    private void disableChips()
+    {
+        for (IngredientChip chip: chips)
+        {
+            chip.setCheckable(false);
+        }
+    }
+
     /**
      UI handler method which calls the web scraper after an IngredientChip has been selected.
 
@@ -410,13 +483,9 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
     @Override
     public boolean onLongClick(View v)
     {
-        int count = 0;
-        for (IngredientChip chip: chips)
-        {
-            if (chip.isChecked()) {
-                count++;
-            }
-        }
+        loadingImage.clearAnimation();
+        recipeList.removeView(loadingImage);
+        int count = getSelectedCount();
 
         if (count == 0)
         {
@@ -425,13 +494,14 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
         }
         else if (recipes != null)
         {
-            recipeList.removeAllViews();
             for (Recipe recipe: recipes)
             {
                 recipeList.addView(new RecipeCard(getContext(), this, null, recipe), recipeCardParams);
             }
+            recipeList.removeView(recipeEmptyText);
         }
-
+        loading = false;
+//        enableChips();
         return true;
     }
 
@@ -445,5 +515,18 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
                 onLongClick(null);
             }
         });
+    }
+
+    @Override
+    public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY)
+    {
+        int diff = ((recipeScroll.getBottom() - recipeScroll.getTop()) - (recipeScroll.getHeight() + scrollY));
+//        int diff = recipeScroll.getMaxScrollAmount() - scrollY;
+
+        Log.d("RecipeScroll", "diff is " + diff);
+        // if diff is zero, then the bottom has been reached
+        if (!loading && lastSelectedCount != 0 && diff == 0) {
+            getWebsite();
+        }
     }
 }

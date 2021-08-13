@@ -5,6 +5,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ScrollView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,7 +14,12 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.widget.Guideline;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  Represents a list-type view containing all of the detected or user-input ingredients in Material Design cards.
@@ -21,14 +28,14 @@ import java.util.ArrayList;
 public class IngredientView extends EntreeConstraintView
 {
 
-    private final int CARD_HEIGHT = 640;
+    private final int CARD_HEIGHT = 600;
     private final int CARD_WIDTH = 344;
     private final int TOP_MARGIN = 60;
     private final int SIDE_MARGIN = 20;
     private final int MIDDLE_MARGIN = 10;
     private final int CARD_MARGIN = 40;
 
-    private int topGuideline;
+    private int topGuideline, bottomHelperGuideline;
     private int firstLeftGuideline, firstRightGuideline;
     private int secondLeftGuideline, secondRightGuideline;
     private int leftMiddleGuideline, rightMiddleGuideline;
@@ -45,6 +52,8 @@ public class IngredientView extends EntreeConstraintView
     /** The information view for a specific ingredient or list of ingredients that is currently being displayed. */
     private View informationView;
 
+    private HashMap<String, FoodData> foodMap;
+
     /**
      Initializes the view and adds 5 dummy cards.
 
@@ -55,21 +64,37 @@ public class IngredientView extends EntreeConstraintView
     {
         super(context, attrs);
 
+//        this.setBackgroundColor(getResources().getColor(R.color.entree_red));
+
         count = 0;
         editing = false;
         cards = new ArrayList<>();
+        foodMap = new HashMap<>();
 
         //Setup Constraints
         set.clone(this);
 
+//        ImageView box = new ImageView(context, attrs);
+//        box.setId(View.generateViewId());
+//        box.setImageDrawable(getResources().getDrawable(R.drawable.food_icon));
+
+//        this.addView(box);
+
         initializeGuidelines();
+
+//        to(box, TOP, bottomHelperGuideline, BOTTOM);
+//        to(box, BOTTOM, this, BOTTOM);
+//        to(box, LEFT, this, LEFT);
+//        to(box, RIGHT, this, RIGHT);
 
         this.setConstraintSet(set);
         set.applyTo(this);
 
-        for (int i = 0; i < 5; i++)
+        readFoodData();
+
+        for (String key: foodMap.keySet())
         {
-            addCard();
+            addCard(new IngredientCard(context, attrs, foodMap.get(key)));
         }
     }
 
@@ -78,7 +103,11 @@ public class IngredientView extends EntreeConstraintView
      */
     public void addCard()
     {
-        IngredientCard card = new IngredientCard(getContext(), null);
+        IngredientCard card = new IngredientCard(getContext(), null, new FoodData());
+        if (editing) {
+            card.disableChecking();
+        }
+
         cards.add(card);
         this.addView(card, new ConstraintLayout.LayoutParams(0, 0));
 
@@ -138,6 +167,10 @@ public class IngredientView extends EntreeConstraintView
     private void addCard(IngredientCard card)
     {
         this.addView(card, new ConstraintLayout.LayoutParams(0, 0));
+        if (!cards.contains(card))
+        {
+            cards.add(card);
+        }
 
         set.clone(this);
 
@@ -185,6 +218,48 @@ public class IngredientView extends EntreeConstraintView
 
         this.setConstraintSet(set);
         set.applyTo(this);
+    }
+
+    private void readFoodData()
+    {
+        // Read the raw csv file
+        // Reads text from character-input stream, buffering characters for efficient reading
+        BufferedReader reader = new BufferedReader(
+                new InputStreamReader(getResources().openRawResource(R.raw.food), Charset.forName("UTF-8"))
+        );
+
+
+        String line = "";
+
+        try
+        {
+            // Step over headers
+            reader.readLine();
+
+            // If buffer is not empty
+            while ((line = reader.readLine()) != null)
+            {
+                // use comma as separator columns of CSV
+                String[] tokens = line.split(",");
+
+                // Read the data
+                FoodData data = new FoodData();
+                data.setArray(tokens);
+
+                // Add the read food to the FoodData HashMap
+                foodMap.put(data.getName().toLowerCase(), data);
+            }
+
+            reader.close();
+        }
+        catch (IOException e)
+        {
+            // Logs error with priority level
+            Log.wtf("MyActivityError", "Error reading data file on line" + line, e);
+
+            // Prints throwable details
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -269,27 +344,19 @@ public class IngredientView extends EntreeConstraintView
 
     public void openInformationView(View v)
     {
+        ((MenuBarsView) this.getParent().getParent()).hideIngredientActionButtons();
         informationView = v;
-        this.addView(informationView, new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
-        to(informationView, TOP, this, TOP);
-        to(informationView, LEFT, this, LEFT);
-        to(informationView, RIGHT, this, RIGHT);
-        to(informationView, BOTTOM, this, BOTTOM);
-
-        this.setConstraintSet(set);
-        set.applyTo(this);
-
-        informationView.setElevation(100f);
+        ScrollView parent = (ScrollView) this.getParent();
+        parent.removeView(this);
+        parent.addView(informationView);parent.scrollTo(0, 0);
     }
 
-    public void closeInformationView()
+    public void closeInformationView(View v)
     {
-        set.clear(informationView.getId());
-        this.removeView(informationView);
-
-        this.setConstraintSet(set);
-        set.applyTo(this);
+        ScrollView parent = (ScrollView) v.getParent();
+        parent.removeView(informationView);
+        parent.addView(this, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0));
+        ((MenuBarsView) this.getParent().getParent()).showIngredientActionButtons();
     }
 
     /**
@@ -304,6 +371,7 @@ public class IngredientView extends EntreeConstraintView
         secondRightGuideline = Guideline.generateViewId();
         leftMiddleGuideline = Guideline.generateViewId();
         rightMiddleGuideline = Guideline.generateViewId();
+        bottomHelperGuideline = Guideline.generateViewId();
 
         set.create(topGuideline, ConstraintSet.HORIZONTAL_GUIDELINE);
         set.create(firstLeftGuideline, ConstraintSet.VERTICAL_GUIDELINE);
@@ -312,6 +380,7 @@ public class IngredientView extends EntreeConstraintView
         set.create(secondRightGuideline, ConstraintSet.VERTICAL_GUIDELINE);
         set.create(leftMiddleGuideline, ConstraintSet.VERTICAL_GUIDELINE);
         set.create(rightMiddleGuideline, ConstraintSet.VERTICAL_GUIDELINE);
+        set.create(bottomHelperGuideline, ConstraintSet.HORIZONTAL_GUIDELINE);
 
         set.setGuidelineBegin(topGuideline, dpToPx(TOP_MARGIN, getContext()));
         set.setGuidelineBegin(firstLeftGuideline, dpToPx(SIDE_MARGIN, getContext()));
@@ -320,6 +389,7 @@ public class IngredientView extends EntreeConstraintView
         set.setGuidelineEnd(secondRightGuideline, dpToPx(SIDE_MARGIN, getContext()));
         set.setGuidelinePercent(leftMiddleGuideline, 0.48f);
         set.setGuidelinePercent(rightMiddleGuideline, 0.52f);
+        set.setGuidelinePercent(bottomHelperGuideline, 0.99f);
     }
 
 }
