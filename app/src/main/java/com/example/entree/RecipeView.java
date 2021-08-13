@@ -351,7 +351,8 @@ public class RecipeView extends EntreeConstraintView implements View.OnClickList
      */
     private void getWebsite() {
 
-        if (!loading)
+//        if (!loading)
+        if (true)
         {
             if (lastSelectedCount != getSelectedCount()) {
                 recipeList.removeAllViews();

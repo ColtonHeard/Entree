@@ -50,13 +50,13 @@ public class AllRecipesDataSource extends RecipesDataSource {
 
 
     public void getRecipes() {
-        if (searchThread != null) {return;}
+//        if (searchThread != null) {listener.onRecipesReady(null);}
 
         searchThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 if (!hasNextPage) {
-                    listener.onRecipesReady(null) ;
+                    listener.onRecipesReady(null);
                      return;
                 };
 
@@ -64,13 +64,13 @@ public class AllRecipesDataSource extends RecipesDataSource {
                 try {connection = buildRequestConnectionFor(ingredientsArray, page);}
                 catch (IOException e) {e.printStackTrace(); return;}
 
-                if (searchThread.isInterrupted()) {return;}
+                if (searchThread.isInterrupted()) {listener.onRecipesReady(null);}
 
                 JSONObject responseJson;
                 try {responseJson = (JSONObject) getResponseFrom(connection).nextValue();}
                 catch (IOException | JSONException e) {e.printStackTrace(); return;}
 
-                if (searchThread.isInterrupted()) {return;}
+                if (searchThread.isInterrupted()) {listener.onRecipesReady(null);}
 
                 String html;
                 try {
@@ -79,7 +79,7 @@ public class AllRecipesDataSource extends RecipesDataSource {
                 }
                 catch (JSONException e) {e.printStackTrace(); return;}
 
-                if (searchThread.isInterrupted()) {return;}
+                if (searchThread.isInterrupted()) {listener.onRecipesReady(null);}
 
                 ArrayList<Recipe> recipesList;
                 try {recipesList = getRecipesFrom(html);}
@@ -98,7 +98,8 @@ public class AllRecipesDataSource extends RecipesDataSource {
 
     public void notifyListener() {
         listener.onRecipesReady(recipesCache);
-        getRecipes();
+        searchThread = null;
+//        getRecipes();
     }
 
     public HttpsURLConnection buildRequestConnectionFor(ArrayList<String> ingredients, Integer page) throws IOException {
